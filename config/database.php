@@ -62,7 +62,7 @@ return [
                 // PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'), // Закомментировано для совместимости
                 PDO::ATTR_TIMEOUT => 60, // Увеличиваем таймаут соединения до 60 секунд
                 PDO::ATTR_PERSISTENT => false, // Отключаем постоянные соединения
-                PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION wait_timeout=28800, interactive_timeout=28800, max_allowed_packet=1073741824", // 8 часов таймаут, 1GB max_allowed_packet
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION wait_timeout=28800, interactive_timeout=28800", // 8 часов таймаут
             ]) : [],
         ],
 

@@ -16,12 +16,14 @@ class Column extends Model
         'color',
         'position',
         'is_default',
+        'is_hidden',
         'space_id',
         'created_by',
     ];
 
     protected $casts = [
         'is_default' => 'boolean',
+        'is_hidden' => 'boolean',
     ];
 
     protected static function boot()
@@ -56,7 +58,23 @@ class Column extends Model
      */
     public function tasks()
     {
+        return $this->hasMany(Task::class, 'column_id')->notArchived();
+    }
+
+    /**
+     * Все задачи в данной колонке (включая архивированные)
+     */
+    public function allTasks()
+    {
         return $this->hasMany(Task::class, 'column_id');
+    }
+
+    /**
+     * Архивированные задачи в данной колонке
+     */
+    public function archivedTasks()
+    {
+        return $this->hasMany(Task::class, 'column_id')->archived();
     }
 
     /**
@@ -65,6 +83,22 @@ class Column extends Model
     public function scopeOrdered($query)
     {
         return $query->orderBy('position')->orderBy('created_at');
+    }
+
+    /**
+     * Scope для фильтрации только видимых колонок
+     */
+    public function scopeVisible($query)
+    {
+        return $query->where('is_hidden', false);
+    }
+    
+    /**
+     * Scope для фильтрации скрытых колонок
+     */
+    public function scopeHidden($query)
+    {
+        return $query->where('is_hidden', true);
     }
 
     /**

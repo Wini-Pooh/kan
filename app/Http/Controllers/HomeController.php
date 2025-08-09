@@ -30,13 +30,13 @@ class HomeController extends Controller
         $user = Auth::user();
         
         // Получаем пространства, где пользователь является участником
-        $userSpaces = $user->spaces()->with(['organization', 'creator', 'members'])->get();
+        $userSpaces = $user->spaces()->with(['organization.owner', 'creator', 'members'])->get();
         
-        // Получаем все организации пользователя
-        $userOrganizations = $user->organizations()->with('spaces')->get();
+        // Получаем все организации пользователя с информацией о владельцах
+        $userOrganizations = $user->organizations()->with(['spaces', 'owner'])->get();
         
         // Получаем организации, которыми пользователь владеет (может создавать пространства)
-        $ownedOrganizations = $user->ownedOrganizations()->with('spaces')->get();
+        $ownedOrganizations = $user->ownedOrganizations()->with(['spaces', 'owner'])->get();
         
         return view('home', compact('userSpaces', 'userOrganizations', 'ownedOrganizations'));
     }
@@ -69,11 +69,11 @@ class HomeController extends Controller
                 ->get();
         }
         
-        // Получаем все организации пользователя для навигации
-        $userOrganizations = $user->organizations()->with('spaces')->get();
+        // Получаем все организации пользователя для навигации с информацией о владельцах
+        $userOrganizations = $user->organizations()->with(['spaces', 'owner'])->get();
         
         // Получаем организации, которыми пользователь владеет
-        $ownedOrganizations = $user->ownedOrganizations()->with('spaces')->get();
+        $ownedOrganizations = $user->ownedOrganizations()->with(['spaces', 'owner'])->get();
         
         return view('organization', compact('organization', 'spaces', 'userOrganizations', 'ownedOrganizations'));
     }
@@ -97,27 +97,65 @@ class HomeController extends Controller
         
         $space->load(['members', 'creator', 'organization', 'columns']);
         
-        // Получаем колонки с задачами
+        // Получаем колонки с задачами (только неархивированными и видимые колонки)
         $columns = $space->columns()
+            ->visible() // Показываем только видимые колонки
             ->ordered()
             ->with(['tasks' => function($query) {
-                $query->orderBy('position')->orderBy('created_at', 'desc');
+                $query->notArchived()
+                      ->with(['assignedUser', 'assignee'])
+                      ->orderBy('position')
+                      ->orderBy('created_at', 'desc');
             }])
             ->get();
         
-        // Для обратной совместимости, группируем задачи по статусу
-        $tasks = $space->tasks()
+        // Для обратной совместимости, группируем задачи по статусу (только неархивированные)
+        $tasks = $space->activeTasks()
             ->orderBy('position')
             ->orderBy('created_at', 'desc')
             ->get()
             ->groupBy('status');
         
-        // Получаем все организации пользователя для навигации
-        $userOrganizations = $user->organizations()->with('spaces')->get();
+        // Получаем все организации пользователя для навигации с информацией о владельцах
+        $userOrganizations = $user->organizations()->with(['spaces', 'owner'])->get();
         
         // Получаем организации, которыми пользователь владеет
-        $ownedOrganizations = $user->ownedOrganizations()->with('spaces')->get();
+        $ownedOrganizations = $user->ownedOrganizations()->with(['spaces', 'owner'])->get();
         
         return view('space', compact('space', 'organization', 'userOrganizations', 'ownedOrganizations', 'columns', 'tasks'));
+    }
+
+    /**
+     * Show space archive
+     */
+    public function showSpaceArchive(Organization $organization, Space $space)
+    {
+        $user = Auth::user();
+        
+        // Проверяем, что пользователь является участником пространства
+        if (!$space->members()->where('user_id', $user->id)->exists()) {
+            abort(403, 'У вас нет доступа к архиву этого пространства');
+        }
+        
+        // Проверяем, что пространство принадлежит указанной организации
+        if ($space->organization_id !== $organization->id) {
+            abort(404, 'Пространство не найдено в данной организации');
+        }
+        
+        $space->load(['creator', 'organization']);
+        
+        // Получаем архивированные задачи
+        $archivedTasks = $space->archivedTasks()
+            ->with(['creator', 'assignee', 'archiver', 'column'])
+            ->orderBy('archived_at', 'desc')
+            ->get();
+        
+        // Получаем все организации пользователя для навигации с информацией о владельцах
+        $userOrganizations = $user->organizations()->with(['spaces', 'owner'])->get();
+        
+        // Получаем организации, которыми пользователь владеет
+        $ownedOrganizations = $user->ownedOrganizations()->with(['spaces', 'owner'])->get();
+        
+        return view('space-archive', compact('space', 'organization', 'userOrganizations', 'ownedOrganizations', 'archivedTasks'));
     }
 }

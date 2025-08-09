@@ -2,89 +2,13 @@
 
 @section('content')
 <div class="container-fluid p-0">
+
     <div class="row g-0">
-        <!-- Боковая панель -->
-        <div class="col-md-3 col-lg-2">
-            <div class="sidebar sketch-border sketch-shadow" style="min-height: 100vh; position: fixed; width: inherit; background-color: var(--sketch-white);">
-                <div class="p-3">
-                    <h4 class="mb-4" style="text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Меню</h4>
-                    
-                    <!-- Организации пользователя -->
-                    <div class="mb-4">
-                        <h6 class="mb-3" style="text-transform: uppercase; letter-spacing: 1px; font-weight: bold; color: var(--sketch-dark-gray);">Комнаты</h6>
-                        
-                        <div class="list-group list-group-flush">
-                            @forelse($userOrganizations as $org)
-                                <div class="list-group-item border-0 px-0 mb-2 {{ $org->id === $organization->id ? 'active-organization' : '' }}">
-                                    <div class="d-flex align-items-center">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                             style="width: 32px; height: 32px; background-color: {{ $org->id === $organization->id ? 'var(--sketch-primary)' : 'var(--sketch-black)' }} !important; color: var(--sketch-white) !important; font-size: 0.8rem; font-weight: bold;">
-                                            {{ substr($org->name, 0, 2) }}
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <a href="{{ route('organizations.show', $org) }}" class="text-decoration-none text-dark">
-                                                <div style="font-weight: bold; font-size: 0.9rem; {{ $org->id === $organization->id ? 'color: var(--sketch-primary) !important;' : '' }}">{{ $org->name }}</div>
-                                                <small style="color: var(--sketch-dark-gray) !important;">{{ ucfirst($org->pivot->role) }}</small>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    
-                                    @if($org->spaces->count() > 0)
-                                        <div class="ms-4 mt-2">
-                                            @foreach($org->spaces as $space)
-                                                <div class="mb-1">
-                                                    <a href="{{ route('spaces.show', [$org, $space]) }}" class="text-decoration-none text-dark d-flex align-items-center">
-                                                        <i class="fas fa-cube me-2" style="font-size: 0.8rem;"></i>
-                                                        <span style="font-size: 0.85rem;">{{ $space->name }}</span>
-                                                    </a>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                </div>
-                            @empty
-                                <div class="list-group-item border-0 px-0">
-                                    <p class="text-muted mb-0">Нет доступных организаций</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                    
-                    <!-- Разделитель -->
-                    <hr style="border: var(--sketch-border-thin) !important; margin: 1.5rem 0;">
-                    
-                    <!-- Дополнительные пункты меню -->
-                    <div class="list-group list-group-flush">
-                        <a href="{{ route('home') }}" class="list-group-item list-group-item-action border-0 mb-1" 
-                           style="border-radius: var(--sketch-radius-small) !important; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--sketch-black) !important; text-decoration: none !important;"
-                           onmouseover="this.style.backgroundColor='var(--sketch-light-gray)'; this.style.transform='translateX(5px)'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'">
-                            <i class="fas fa-home me-2" style="width: 20px;"></i>
-                            Главная
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0 mb-1" 
-                           style="border-radius: var(--sketch-radius-small) !important; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--sketch-black) !important; text-decoration: none !important;"
-                           onmouseover="this.style.backgroundColor='var(--sketch-light-gray)'; this.style.transform='translateX(5px)'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'"
-                           data-bs-toggle="modal" data-bs-target="#createOrganizationModal">
-                            <i class="fas fa-building me-2" style="width: 20px;"></i>
-                            Создать комнату
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0 mb-1" 
-                           style="border-radius: var(--sketch-radius-small) !important; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--sketch-black) !important; text-decoration: none !important;"
-                           onmouseover="this.style.backgroundColor='var(--sketch-light-gray)'; this.style.transform='translateX(5px)'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'">
-                            <i class="fas fa-user me-2" style="width: 20px;"></i>
-                            Профиль
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+       @include('layouts.sidebar')
 
         <!-- Основной контент -->
-        <div class="col-md-9 col-lg-10 offset-md-3 offset-lg-2">
-            <div class="main-content p-4">
+        <div class="col-12 col-md-9 col-lg-10 offset-md-3 offset-lg-2">
+            <div class="main-content p-4 p-sm-3">
                 @if (session('success'))
                     <div class="alert alert-success mb-4" role="alert">
                         {{ session('success') }}
@@ -98,14 +22,14 @@
                 @endif
 
                 <!-- Заголовок страницы -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h1 style="text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">{{ $organization->name }}</h1>
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
+                    <div class="mb-3 mb-md-0">
+                        <h1 class="mb-2" style="text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">{{ $organization->name }}</h1>
                         <p class="text-muted mb-0">{{ $organization->description }}</p>
                     </div>
-                    <div>
+                    <div class="">
                         @if($organization->owner_id === Auth::id())
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSpaceModal">
+                            <button class="btn w-100 w-md-auto" style="max-width: 330px" data-bs-toggle="modal" data-bs-target="#createSpaceModal">
                                 <i class="fas fa-plus me-2"></i>Создать пространство
                             </button>
                         @endif
@@ -116,14 +40,14 @@
                 <div class="row g-4">
                     <!-- Карточка создания нового пространства -->
                     @if($organization->owner_id === Auth::id())
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 border-2 border-dashed" style="min-height: 260px; cursor: pointer; transition: all 0.3s ease;" 
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="card h-100 border-2 border-dashed" style="min-height: 200px; cursor: pointer; transition: all 0.3s ease;" 
                              data-bs-toggle="modal" data-bs-target="#createSpaceModal"
                              onmouseover="this.style.backgroundColor='#f8f9fa'" 
                              onmouseout="this.style.backgroundColor='white'">
                             <div class="card-body d-flex align-items-center justify-content-center">
                                 <div class="text-center">
-                                    <i class="fas fa-plus" style="font-size: 3rem; color: #6c757d; margin-bottom: 1rem;"></i>
+                                    <i class="fas fa-plus" style="font-size: 2.5rem; color: #6c757d; margin-bottom: 1rem;"></i>
                                     <h5 class="text-muted">Создать пространство</h5>
                                 </div>
                             </div>
@@ -133,8 +57,8 @@
 
                     <!-- Карточки пространств организации -->
                     @forelse($spaces as $space)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 position-relative space-card" style="min-height: 200px; transition: transform 0.3s ease; cursor: pointer;" 
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="card h-100 position-relative space-card" style="min-height: 180px; transition: transform 0.3s ease; cursor: pointer;" 
                              data-space-url="{{ route('spaces.show', [$organization, $space]) }}"
                              onmouseover="this.style.transform='translateY(-5px)'" 
                              onmouseout="this.style.transform='translateY(0)'">
@@ -278,16 +202,16 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="space_name" class="form-label">Название пространства</label>
-                        <input type="text" class="form-control" id="space_name" name="name" required>
+                        <input type="text" class="form-control" id="space_name" name="name" required maxlength="100">
                     </div>
                     <div class="mb-3">
                         <label for="space_description" class="form-label">Описание (необязательно)</label>
-                        <textarea class="form-control" id="space_description" name="description" rows="3"></textarea>
+                        <textarea class="form-control" id="space_description" name="description" rows="3" maxlength="500"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Создать пространство</button>
+                    <button type="submit" class="btn ">Создать пространство</button>
                 </div>
             </form>
         </div>
@@ -308,11 +232,11 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="organization_name" class="form-label">Название организации</label>
-                        <input type="text" class="form-control" id="organization_name" name="name" required>
+                        <input type="text" class="form-control" id="organization_name" name="name" required maxlength="100">
                     </div>
                     <div class="mb-3">
                         <label for="organization_description" class="form-label">Описание (необязательно)</label>
-                        <textarea class="form-control" id="organization_description" name="description" rows="3"></textarea>
+                        <textarea class="form-control" id="organization_description" name="description" rows="3" maxlength="500"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -430,7 +354,7 @@ function generateAndCopyInviteLink(spaceId) {
                 
                 setTimeout(() => {
                     copyBtn.innerHTML = '<i class="fas fa-copy me-1"></i>Скопировать ссылку';
-                    copyBtn.className = 'btn btn-primary';
+                    copyBtn.className = 'btn ';
                     copyBtn.disabled = false;
                 }, 2000);
             }).catch(() => {
@@ -442,7 +366,7 @@ function generateAndCopyInviteLink(spaceId) {
                 
                 setTimeout(() => {
                     copyBtn.innerHTML = '<i class="fas fa-copy me-1"></i>Скопировать ссылку';
-                    copyBtn.className = 'btn btn-primary';
+                    copyBtn.className = 'btn ';
                     copyBtn.disabled = false;
                 }, 2000);
             });
@@ -456,7 +380,7 @@ function generateAndCopyInviteLink(spaceId) {
         
         setTimeout(() => {
             copyBtn.innerHTML = '<i class="fas fa-copy me-1"></i>Скопировать ссылку';
-            copyBtn.className = 'btn btn-primary';
+            copyBtn.className = 'btn ';
         }, 3000);
     });
 }

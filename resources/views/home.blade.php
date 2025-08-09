@@ -2,93 +2,17 @@
 
 @section('content')
 <div class="container-fluid p-0">
+    <!-- Мобильная кнопка для переключения сайдбара -->
+    <button class="sidebar-toggle d-md-none" type="button" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Фон для затемнения при открытом сайдбаре -->
+    <div class="sidebar-backdrop"></div>
+    
     <div class="row g-0">
-        <!-- Боковая панель -->
-        <div class="col-md-3 col-lg-2">
-            <div class="sidebar sketch-border sketch-shadow" style="min-height: 100vh; position: fixed; width: inherit; background-color: var(--sketch-white);">
-                <div class="p-3">
-                    <h4 class="mb-4" style="text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Меню</h4>
-                    
-                    <!-- Организации пользователя -->
-                    <div class="mb-4">
-                        <h6 class="mb-3" style="text-transform: uppercase; letter-spacing: 1px; font-weight: bold; color: var(--sketch-dark-gray);">Комнаты</h6>
-                        
-                        <div class="list-group list-group-flush">
-                            @forelse($userOrganizations as $organization)
-                                <div class="list-group-item border-0 px-0 mb-2">
-                                    <div class="d-flex align-items-center">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                             style="width: 32px; height: 32px; background-color: var(--sketch-black) !important; color: var(--sketch-white) !important; font-size: 0.8rem; font-weight: bold;">
-                                            {{ substr($organization->name, 0, 2) }}
-                                        </div>
-                                        <div class="flex-grow-1">
-                                            <a href="{{ route('organizations.show', $organization) }}" class="text-decoration-none text-dark">
-                                                <div style="font-weight: bold; font-size: 0.9rem;">{{ $organization->name }}</div>
-                                                <small style="color: var(--sketch-dark-gray) !important;">{{ ucfirst($organization->pivot->role) }}</small>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    
-                                    @if($organization->spaces->count() > 0)
-                                        <div class="ms-4 mt-2">
-                                            @foreach($organization->spaces as $space)
-                                                <div class="mb-1">
-                                                    <a href="{{ route('spaces.show', [$organization, $space]) }}" class="text-decoration-none text-dark d-flex align-items-center">
-                                                        <i class="fas fa-cube me-2" style="font-size: 0.8rem;"></i>
-                                                        <span style="font-size: 0.85rem;">{{ $space->name }}</span>
-                                                    </a>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                </div>
-                            @empty
-                                <div class="list-group-item border-0 px-0">
-                                    <p class="text-muted mb-0">Нет доступных организаций</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                    
-                    <!-- Разделитель -->
-                    <hr style="border: var(--sketch-border-thin) !important; margin: 1.5rem 0;">
-                    
-                    <!-- Дополнительные пункты меню -->
-                    <div class="list-group list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action border-0 mb-1" 
-                           style="border-radius: var(--sketch-radius-small) !important; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--sketch-black) !important; text-decoration: none !important;"
-                           onmouseover="this.style.backgroundColor='var(--sketch-light-gray)'; this.style.transform='translateX(5px)'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'"
-                           data-bs-toggle="modal" data-bs-target="#createOrganizationModal">
-                            <i class="fas fa-building me-2" style="width: 20px;"></i>
-                            Создать комнату
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0 mb-1" 
-                           style="border-radius: var(--sketch-radius-small) !important; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--sketch-black) !important; text-decoration: none !important;"
-                           onmouseover="this.style.backgroundColor='var(--sketch-light-gray)'; this.style.transform='translateX(5px)'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'">
-                            <i class="fas fa-user me-2" style="width: 20px;"></i>
-                            Профиль
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0 mb-1" 
-                           style="border-radius: var(--sketch-radius-small) !important; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--sketch-black) !important; text-decoration: none !important;"
-                           onmouseover="this.style.backgroundColor='var(--sketch-light-gray)'; this.style.transform='translateX(5px)'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'">
-                            <i class="fas fa-cog me-2" style="width: 20px;"></i>
-                            Настройки
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0 mb-1" 
-                           style="border-radius: var(--sketch-radius-small) !important; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: var(--sketch-black) !important; text-decoration: none !important;"
-                           onmouseover="this.style.backgroundColor='var(--sketch-light-gray)'; this.style.transform='translateX(5px)'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateX(0)'">
-                            <i class="fas fa-question-circle me-2" style="width: 20px;"></i>
-                            Помощь
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @include('layouts.sidebar')
+                 
         <!-- Основной контент -->
         <div class="col-md-9 col-lg-10 offset-md-3 offset-lg-2">
             <div class="main-content p-4">
@@ -118,7 +42,7 @@
                             <i class="fas fa-plus me-2"></i>Создать комнату
                         </button>
                         @if($ownedOrganizations->count() > 0)
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createSpaceModal">
+                            <button class="btn " data-bs-toggle="modal" data-bs-target="#createSpaceModal">
                                 <i class="fas fa-plus me-2"></i>Создать пространство
                             </button>
                         @endif
@@ -229,7 +153,7 @@
                                                         <label class="form-label" style="font-size: 0.8rem; font-weight: bold; color: black;">Ссылка для приглашения:</label>
                                                         <div class="input-group">
                                                             <input type="text" class="form-control" id="inviteLink{{ $space->id }}" readonly style="font-size: 0.8rem;" placeholder="Ссылка будет создана автоматически">
-                                                            <button class="btn btn-primary" type="button" onclick="generateAndCopyInviteLink({{ $space->id }})" style="font-size: 0.8rem;" id="copyBtn{{ $space->id }}">
+                                                            <button class="btn " type="button" onclick="generateAndCopyInviteLink({{ $space->id }})" style="font-size: 0.8rem;" id="copyBtn{{ $space->id }}">
                                                                 <i class="fas fa-copy me-1"></i>Скопировать ссылку
                                                             </button>
                                                         </div>
@@ -278,11 +202,11 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="spaceName" class="form-label">Название пространства</label>
-                        <input type="text" class="form-control" id="spaceName" name="name" required>
+                        <input type="text" class="form-control" id="spaceName" name="name" required maxlength="100">
                     </div>
                     <div class="mb-3">
                         <label for="spaceDescription" class="form-label">Описание (необязательно)</label>
-                        <textarea class="form-control" id="spaceDescription" name="description" rows="3"></textarea>
+                        <textarea class="form-control" id="spaceDescription" name="description" rows="3" maxlength="500"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="organizationId" class="form-label">Организация</label>
@@ -296,7 +220,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Создать пространство</button>
+                    <button type="submit" class="btn ">Создать пространство</button>
                 </div>
             </form>
         </div>
@@ -317,11 +241,11 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="organizationName" class="form-label">Название организации</label>
-                        <input type="text" class="form-control" id="organizationName" name="name" required>
+                        <input type="text" class="form-control" id="organizationName" name="name" required maxlength="100">
                     </div>
                     <div class="mb-3">
                         <label for="organizationDescription" class="form-label">Описание (необязательно)</label>
-                        <textarea class="form-control" id="organizationDescription" name="description" rows="3"></textarea>
+                        <textarea class="form-control" id="organizationDescription" name="description" rows="3" maxlength="500"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -554,13 +478,13 @@ function generateAndCopyInviteLink(spaceId) {
                 navigator.clipboard.writeText(data.invite_url).then(function() {
                     // Показываем успешное копирование
                     btn.innerHTML = '<i class="fas fa-check me-1"></i>Скопировано!';
-                    btn.classList.remove('btn-primary');
+                    btn.classList.remove('');
                     btn.classList.add('btn-success');
                     
                     setTimeout(() => {
                         btn.innerHTML = '<i class="fas fa-copy me-1"></i>Скопировать ссылку';
                         btn.classList.remove('btn-success');
-                        btn.classList.add('btn-primary');
+                        btn.classList.add('');
                         btn.disabled = false;
                     }, 3000);
                 }).catch(function() {
@@ -617,13 +541,13 @@ function copyToClipboardFallback(text, btn) {
         if (successful) {
             if (btn) {
                 btn.innerHTML = '<i class="fas fa-check me-1"></i>Скопировано!';
-                btn.classList.remove('btn-primary');
+                btn.classList.remove('');
                 btn.classList.add('btn-success');
                 
                 setTimeout(() => {
                     btn.innerHTML = '<i class="fas fa-copy me-1"></i>Скопировать ссылку';
                     btn.classList.remove('btn-success');
-                    btn.classList.add('btn-primary');
+                    btn.classList.add('');
                     btn.disabled = false;
                 }, 3000);
             }

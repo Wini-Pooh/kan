@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Column;
 use App\Models\Space;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ColumnController extends Controller
@@ -142,6 +143,14 @@ class ColumnController extends Controller
      */ 
     public function destroy(Space $space, Column $column)
     {
+        Log::info('Column deletion attempt', [
+            'space_id' => $space->id,
+            'column_id' => $column->id,
+            'user_id' => Auth::id(),
+            'tasks_count' => $column->tasks()->count(),
+            'can_be_deleted' => $column->canBeDeleted()
+        ]);
+
         // Проверяем права доступа
         if (!$space->members()->where('user_id', Auth::id())->exists()) {
             abort(403, 'У вас нет доступа к этому пространству');
@@ -153,26 +162,46 @@ class ColumnController extends Controller
 
         // Проверяем, можно ли удалить колонку
         if (!$column->canBeDeleted()) {
+            Log::warning('Cannot delete default column', ['column_id' => $column->id]);
             return response()->json([
                 'success' => false,
                 'message' => 'Нельзя удалить встроенную колонку'
             ], 400);
         }
 
-        // Проверяем, есть ли задачи в колонке
-        $tasksCount = $column->tasks()->count();
+        // Архивируем все задачи в колонке перед её скрытием
+        $tasksCount = $column->allTasks()->whereNull('archived_at')->count();
         if ($tasksCount > 0) {
-            return response()->json([
-                'success' => false,
-                'message' => "В колонке находится {$tasksCount} задач(и). Переместите их в другие колонки перед удалением."
-            ], 400);
+            // Архивируем задачи, но сохраняем ссылку на колонку
+            $column->allTasks()->whereNull('archived_at')->update([
+                'archived_at' => now(),
+                'archived_by' => Auth::id()
+            ]);
+            
+            Log::info('Tasks archived before column hiding', [
+                'column_id' => $column->id,
+                'archived_tasks_count' => $tasksCount
+            ]);
         }
 
-        $column->delete();
+        // Вместо удаления колонки, помечаем её как скрытую
+        $column->update([
+            'is_hidden' => true
+        ]);
+        
+        Log::info('Column hidden (soft deleted)', [
+            'column_id' => $column->id,
+            'archived_tasks_count' => $tasksCount
+        ]);
+
+        $message = $tasksCount > 0 
+            ? "Колонка успешно скрыта. {$tasksCount} задач(и) были автоматически архивированы. Вы можете найти их в архиве."
+            : 'Колонка успешно скрыта';
 
         return response()->json([
             'success' => true,
-            'message' => 'Колонка успешно удалена'
+            'message' => $message,
+            'archived_tasks_count' => $tasksCount
         ]);
     }
 
@@ -187,6 +216,7 @@ class ColumnController extends Controller
         }
 
         $columns = $space->columns()
+            ->visible() // Показываем только видимые колонки
             ->ordered()
             ->withCount('tasks')
             ->get();
@@ -307,5 +337,68 @@ class ColumnController extends Controller
                 'message' => 'Ошибка при перемещении колонки: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Восстановление удаленной (скрытой) колонки
+     */
+    public function restore(Request $request, Space $space, $columnId)
+    {
+        try {
+            // Находим скрытую колонку
+            $column = Column::where('id', $columnId)
+                ->where('space_id', $space->id)
+                ->where('is_hidden', true)
+                ->firstOrFail();
+            
+            // Проверяем права доступа
+            if (!$space->members()->where('user_id', Auth::id())->exists()) {
+                abort(403, 'У вас нет доступа к этому пространству');
+            }
+            
+            // Восстанавливаем колонку
+            $column->update([
+                'is_hidden' => false
+            ]);
+            
+            Log::info('Column restored from deleted state', [
+                'column_id' => $column->id,
+                'user_id' => Auth::id()
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Колонка успешно восстановлена',
+                'column' => $column
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка при восстановлении колонки: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    /**
+     * Получение списка удаленных (скрытых) колонок пространства
+     */
+    public function hiddenColumns(Space $space)
+    {
+        // Проверяем права доступа
+        if (!$space->members()->where('user_id', Auth::id())->exists()) {
+            abort(403, 'У вас нет доступа к этому пространству');
+        }
+
+        $columns = $space->columns()
+            ->hidden() // Показываем только скрытые колонки
+            ->ordered()
+            ->withCount('tasks')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'columns' => $columns
+        ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\SpaceController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\TaskViewController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +43,15 @@ Auth::routes(['login' => false, 'register' => false]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/organizations/{organization}', [App\Http\Controllers\HomeController::class, 'showOrganization'])->name('organizations.show');
 Route::get('/organizations/{organization}/spaces/{space}', [App\Http\Controllers\HomeController::class, 'showSpace'])->name('spaces.show');
+Route::get('/organizations/{organization}/spaces/{space}/archive', [App\Http\Controllers\HomeController::class, 'showSpaceArchive'])->name('spaces.archive');
 
 // Маршруты для организаций и пространств
 Route::middleware('auth')->group(function () {
+    // Профиль пользователя
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    
     // Организации
     Route::post('/organizations', [OrganizationController::class, 'store'])->name('organizations.store');
     
@@ -60,8 +67,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/tasks/{task}', [TaskViewController::class, 'show'])->name('tasks.show');
     Route::put('/tasks/{task}', [TaskViewController::class, 'update'])->name('tasks.update');
     Route::put('/tasks/{task}/content', [TaskViewController::class, 'updateContent'])->name('tasks.update.content');
+    Route::put('/tasks/{task}/title', [TaskViewController::class, 'updateTitle'])->name('tasks.update.title');
+    Route::put('/tasks/{task}/priority', [TaskViewController::class, 'updatePriority'])->name('tasks.update.priority');
+    Route::put('/tasks/{task}/start-date', [TaskViewController::class, 'updateStartDate'])->name('tasks.update.start_date');
+    Route::put('/tasks/{task}/due-date', [TaskViewController::class, 'updateDueDate'])->name('tasks.update.due_date');
+    Route::put('/tasks/{task}/assignee', [TaskViewController::class, 'updateAssignee'])->name('tasks.update.assignee');
     Route::post('/tasks/{task}/upload', [TaskViewController::class, 'uploadFile'])->name('tasks.upload');
     Route::delete('/tasks/{task}', [TaskViewController::class, 'destroy'])->name('tasks.destroy');
+    Route::get('/tasks/{task}/pdf', [TaskViewController::class, 'downloadPDF'])->name('tasks.download.pdf');
+    Route::post('/tasks/{task}/archive', [TaskViewController::class, 'archive'])->name('tasks.archive');
+    Route::post('/tasks/{task}/unarchive', [TaskViewController::class, 'unarchive'])->name('tasks.unarchive');
 });
 
 // Маршруты для приглашений

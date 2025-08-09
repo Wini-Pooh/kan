@@ -1,0 +1,194 @@
+/* Мобильные стили для канбан-доски */
+
+/* Стили для заголовка канбан-доски */
+@media (max-width: 767.98px) {
+    .kanban-header {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0.75rem 0.5rem !important;
+        margin-bottom: 0.75rem !important;
+        flex-wrap: wrap !important;
+        position: sticky !important;
+        top: 0 !important;
+        background-color: #fff !important;
+        z-index: 10 !important;
+    }
+
+    .kanban-title {
+        font-size: 1.25rem !important;
+        margin-bottom: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 1 !important;
+        min-width: 0 !important; /* Позволяет тексту сжиматься */
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        margin-right: 0.5rem !important;
+    }
+    
+    .board-title-text {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: calc(100% - 30px) !important; /* Учитываем размер кнопки "назад" */
+    }
+    
+    /* Уменьшить размер для очень маленьких экранов */
+    @media (max-width: 360px) {
+        .kanban-title {
+            font-size: 1rem !important;
+        }
+    }
+
+    .header-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+    }
+
+    .add-column-btn {
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.85rem !important;
+        white-space: nowrap !important;
+    }
+
+    .back-arrow-link {
+        padding: 0.25rem 0.5rem !important;
+        margin-right: 0.5rem !important;
+    }
+    
+    /* Показать текст "Архив" даже на маленьких экранах */
+    .add-column-btn .d-none.d-sm-inline {
+        display: inline !important;
+    }
+    
+    /* Стили для дополнительных кнопок в шапке */
+    .header-actions .btn-sm {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.85rem !important;
+        margin-left: 0.25rem !important;
+    }
+    
+    /* Стили для очень маленьких экранов */
+    @media (max-width: 360px) {
+        .header-actions {
+            margin-top: 0.25rem !important;
+        }
+        
+        .add-column-btn {
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+        }
+        
+        .header-actions .btn-sm {
+            padding: 0.25rem 0.4rem !important;
+            font-size: 0.75rem !important;
+        }
+    }
+
+    /* Горизонтальный скролл для доски */
+    .kanban-board {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        padding-bottom: 1rem !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-snap-type: x mandatory !important;
+        scroll-behavior: smooth !important;
+    }
+
+    /* Стили для колонок */
+    .kanban-column {
+        min-width: 260px !important;
+        max-width: 280px !important;
+        flex: 0 0 auto !important;
+        margin-right: 0.75rem !important;
+        scroll-snap-align: start !important;
+        height: calc(100vh - 180px) !important;
+    }
+
+    .column-header {
+        padding: 0.75rem 0.5rem !important;
+    }
+
+    .column-title {
+        font-size: 1rem !important;
+        max-width: 150px !important;
+    }
+
+    .column-actions {
+        opacity: 1 !important;
+    }
+
+    .column-action-btn {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.7rem !important;
+    }
+
+    /* Стили для задач */
+    .task-list {
+        max-height: calc(100vh - 220px) !important;
+    }
+
+    .task-card {
+        padding: 0.75rem !important;
+        min-height: auto !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .task-title {
+        font-size: 0.9rem !important;
+    }
+
+    .task-description {
+        font-size: 0.8rem !important;
+        margin-bottom: 0.5rem !important;
+        max-height: 50px !important;
+        overflow: hidden !important;
+    }
+
+    /* Стили для кнопки добавления новой колонки */
+
+    /* Стили для кнопки добавления новой колонки */
+    .add-column-container {
+        min-width: 260px !important;
+        max-width: 280px !important;
+        margin-right: 0.75rem !important;
+        scroll-snap-align: start !important;
+    }
+
+    /* Управление видимостью модальных окон */
+    .modal-dialog {
+        margin: 0.5rem !important;
+        max-width: calc(100% - 1rem) !important;
+    }
+}
+
+/* Изменение стилей для модальных окон на мобильных устройствах */
+
+/* Изменение стилей для модальных окон на мобильных устройствах */
+@media (max-width: 767.98px) {
+    .modal-content {
+        border-radius: 1rem !important;
+    }
+
+    .modal-header {
+        padding: 0.75rem 1rem !important;
+    }
+
+    .modal-body {
+        padding: 1rem !important;
+    }
+
+    .modal-footer {
+        padding: 0.75rem 1rem !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .modal-footer .btn {
+        flex: 1 !important;
+    }
+}

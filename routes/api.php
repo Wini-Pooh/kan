@@ -33,10 +33,12 @@ Route::middleware('auth')->group(function () {
         
         // Маршруты для колонок
         Route::get('/columns', [ColumnController::class, 'index']);
+        Route::get('/columns/hidden', [ColumnController::class, 'hiddenColumns']);
         Route::post('/columns', [ColumnController::class, 'store']);
         Route::put('/columns/{column}', [ColumnController::class, 'update']);
         Route::delete('/columns/{column}', [ColumnController::class, 'destroy']);
         Route::patch('/columns/positions', [ColumnController::class, 'updatePositions']);
+        Route::post('/columns/{columnId}/restore', [ColumnController::class, 'restore']);
     });
     
     // Отдельные маршруты для колонок (без привязки к пространству)

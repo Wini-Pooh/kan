@@ -1,0 +1,202 @@
+/* Стили для мобильного адаптива */
+
+/* Переменные для точек breakpoints */
+:root {
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+}
+
+/* Общие стили для мобильной адаптации */
+@media (max-width: 767.98px) {
+    h1 {
+        font-size: 1.75rem !important;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    h3 {
+        font-size: 1.35rem !important;
+    }
+    
+    h4 {
+        font-size: 1.25rem !important;
+    }
+    
+    .container-fluid {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    
+    .main-content {
+        padding: 1rem !important;
+    }
+    
+    .btn {
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    /* Стили для уменьшения размера кнопок */
+    .btn-sm-mobile {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+/* Стили для боковой панели */
+@media (max-width: 767.98px) {
+    /* Настройка контейнера боковой панели для мобильных устройств */
+    .sidebar-container {
+        display: block; /* Показываем на десктопе */
+    }
+    
+    @media (max-width: 767.98px) {
+        .sidebar-container {
+            display: none; /* Скрыт по умолчанию на мобильных, будет показан через JS */
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 80% !important;
+            max-width: 300px !important;
+            height: 100% !important;
+            z-index: 1050 !important;
+        }
+    }
+    
+    /* Скрыть сайдбар в начальном состоянии */
+    .sidebar {
+        position: relative !important;
+        top: 0 !important;
+        left: -100% !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: 100vh !important;
+        z-index: 1050 !important;
+        transition: left 0.3s ease-in-out !important;
+        overflow-y: auto !important;
+        background-color: var(--sketch-white) !important;
+    }
+    
+    /* Показать сайдбар когда активен */
+    .sidebar.active {
+        left: 0 !important;
+    }
+    
+    /* Стили для кнопки переключения сайдбара */
+    .sidebar-toggle {
+        position: fixed !important;
+        top: 1rem !important;
+        left: 1rem !important;
+        z-index: 1040 !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background-color: var(--sketch-black) !important;
+        color: var(--sketch-white) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+        cursor: pointer !important;
+        border: none !important;
+    }
+    
+    /* Стиль для затемнения фона при открытом сайдбаре */
+    .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        transition: opacity 0.3s ease-in-out;
+        pointer-events: none;
+        opacity: 0;
+    }
+    
+    .sidebar-backdrop.active {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    /* Отступ для основного контента */
+    .col-md-9.col-lg-10 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        padding-top: 50px !important;
+    }
+    
+    .offset-md-3,
+    .offset-lg-2 {
+        margin-left: 0 !important;
+    }
+}
+
+/* Стили для карточек пространств */
+@media (max-width: 767.98px) {
+    .col-lg-4.col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .card {
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Заголовок страницы и кнопки */
+    .d-flex.justify-content-between.align-items-center {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+    
+    .d-flex.justify-content-between.align-items-center > div:last-child {
+        margin-top: 1rem !important;
+        width: 100% !important;
+    }
+    
+    .d-flex.justify-content-between.align-items-center > div:last-child .btn {
+        width: 100% !important;
+        margin-bottom: 0.5rem !important;
+        display: block !important;
+    }
+}
+
+/* Стили для меню пользователя */
+@media (max-width: 767.98px) {
+    .custom-dropdown-menu {
+        max-width: 100% !important;
+        width: 280px !important;
+        left: auto !important;
+        right: 0 !important;
+        transform: none !important;
+    }
+}
+
+/* Стили для небольших телефонов */
+@media (max-width: 575.98px) {
+    .main-content {
+        padding: 0.75rem !important;
+    }
+    
+    h1 {
+        font-size: 1.5rem !important;
+    }
+    
+    .btn {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .card-body {
+        padding: 1rem !important;
+    }
+}

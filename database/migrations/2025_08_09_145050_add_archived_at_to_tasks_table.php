@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->longText('content')->nullable()->after('description');
+            $table->timestamp('archived_at')->nullable()->after('completed_at');
+            $table->foreignId('archived_by')->nullable()->constrained('users')->onDelete('set null')->after('archived_at');
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('content');
+            $table->dropForeign(['archived_by']);
+            $table->dropColumn(['archived_at', 'archived_by']);
         });
     }
 };

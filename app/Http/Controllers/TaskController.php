@@ -98,7 +98,17 @@ class TaskController extends Controller
             $column = Column::find($request->column_id);
             if ($column && $column->space_id === $space->id) {
                 $updateData['column_id'] = $column->id;
-                $updateData['status'] = $column->slug; // Используем slug колонки как статус
+                $mappedStatus = $this->mapColumnToStatus($column->slug);
+                
+                // Логирование для отладки
+                Log::info('Column mapping', [
+                    'column_id' => $column->id,
+                    'column_name' => $column->name,
+                    'column_slug' => $column->slug,
+                    'mapped_status' => $mappedStatus
+                ]);
+                
+                $updateData['status'] = $mappedStatus;
             }
         } elseif ($request->status) {
             $updateData['status'] = $request->status;
@@ -110,6 +120,14 @@ class TaskController extends Controller
             // Автоматически устанавливаем позицию в конец
             $newStatus = $updateData['status'] ?? $task->status;
             $updateData['position'] = $this->getNextPosition($space, $newStatus);
+        }
+
+        // Дополнительная проверка валидности статуса
+        if (isset($updateData['status']) && !in_array($updateData['status'], ['todo', 'progress', 'done'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Недопустимый статус задачи: ' . $updateData['status']
+            ], 400);
         }
 
         $task->update($updateData);
@@ -587,5 +605,55 @@ class TaskController extends Controller
         }
 
         return $bytes;
+    }
+
+    /**
+     * Маппинг slug колонки на допустимые статусы задач
+     */
+    private function mapColumnToStatus($columnSlug)
+    {
+        // Стандартный маппинг slug на статусы
+        $mapping = [
+            'todo' => 'todo',
+            'to-do' => 'todo',
+            'backlog' => 'todo',
+            'new' => 'todo',
+            'открытые' => 'todo',
+            'к-выполнению' => 'todo',
+            
+            'progress' => 'progress',
+            'in-progress' => 'progress',
+            'doing' => 'progress',
+            'work' => 'progress',
+            'в-работе' => 'progress',
+            'в-процессе' => 'progress',
+            
+            'done' => 'done',
+            'completed' => 'done',
+            'finished' => 'done',
+            'closed' => 'done',
+            'выполнено' => 'done',
+            'готово' => 'done',
+        ];
+
+        // Приводим к нижнему регистру для сравнения
+        $lowerSlug = strtolower($columnSlug);
+        
+        // Если есть точное соответствие, возвращаем его
+        if (isset($mapping[$lowerSlug])) {
+            return $mapping[$lowerSlug];
+        }
+        
+        // Если slug содержит ключевые слова, пробуем найти частичное соответствие
+        if (str_contains($lowerSlug, 'progress') || str_contains($lowerSlug, 'work') || str_contains($lowerSlug, 'процесс')) {
+            return 'progress';
+        }
+        
+        if (str_contains($lowerSlug, 'done') || str_contains($lowerSlug, 'complete') || str_contains($lowerSlug, 'finish') || str_contains($lowerSlug, 'выполн')) {
+            return 'done';
+        }
+        
+        // По умолчанию возвращаем 'todo'
+        return 'todo';
     }
 }

@@ -73,6 +73,16 @@ class Space extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function activeTasks()
+    {
+        return $this->hasMany(Task::class)->notArchived();
+    }
+
+    public function archivedTasks()
+    {
+        return $this->hasMany(Task::class)->archived();
+    }
+
     public function columns()
     {
         return $this->hasMany(Column::class);

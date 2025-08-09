@@ -1,0 +1,147 @@
+.custom-dropdown {
+    position: relative;
+}
+
+.custom-dropdown-toggle {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.custom-dropdown-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+}
+
+.custom-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+    display: none;
+    min-width: 280px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.custom-dropdown-menu.show {
+    display: block;
+}
+
+.custom-dropdown-content {
+    padding: 0.5rem 1rem;
+}
+
+.custom-dropdown-header {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.member-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+    margin-bottom: 0.5rem;
+}
+
+.member-item:hover {
+    background-color: #f8f9fa;
+}
+
+.member-info {
+    display: flex;
+    align-items: center;
+}
+
+.member-avatar {
+    width: 32px;
+    height: 32px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+.member-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.member-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.member-role {
+    font-size: 0.7rem;
+    color: #6c757d;
+}
+
+.custom-dropdown-divider {
+    border-top: 1px solid #eee;
+    margin: 0.5rem 0;
+}
+
+.custom-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.custom-dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.custom-dropdown-item i {
+    margin-right: 0.5rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* Мобильные стили для выпадающих меню */
+@media (max-width: 767.98px) {
+    .custom-dropdown-menu {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-height: 80vh;
+        overflow-y: auto;
+        width: 90%;
+        max-width: 320px;
+    }
+    
+    .custom-dropdown-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+    
+    .custom-dropdown-backdrop.show {
+        display: block;
+    }
+}

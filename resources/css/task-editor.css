@@ -11526,7 +11526,7 @@ a:hover {
     color: var(--sketch-black) !important;
     text-decoration: none !important;
     background-color: var(--sketch-light-gray) !important;
-    /* padding: 2px 4px !important; */
+    padding: 2px 4px !important;
 }
 /* Tables */
 .table {
@@ -12146,9 +12146,6 @@ a:hover {
 .column-action-btn.delete:hover {
     color: var(--sketch-red);
 }
-.column-action-btn.add-task:hover {
-    color: var(--sketch-green);
-}
 .column-title {
     font-size: 18px;
     font-weight: bold;
@@ -12180,28 +12177,23 @@ a:hover {
 .task-card {
     background-color: var(--sketch-white);
     border: var(--sketch-border);
-    border-radius: 9px;
+    border-radius: var(--sketch-radius);
     padding: 16px;
     min-height: 180px;
     cursor: grab;
     transition: all 0.2s ease;
     position: relative;
-    user-select: none;
 }
 .task-card:hover {
     transform: translateY(-2px);
     box-shadow: var(--sketch-shadow);
-    cursor: grab;
 }
 .task-card:active {
     cursor: grabbing;
 }
 .task-card.dragging {
-    opacity: 0.7;
-    transform: rotate(3deg) scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    cursor: grabbing;
+    opacity: 0.5;
+    transform: rotate(5deg);
 }
 .task-card.completed {
     background-color: #f8f9fa;
@@ -12245,119 +12237,28 @@ a:hover {
 .priority-low {
     background-color: var(--sketch-green);
 }
-/* Квадратный индикатор приоритета */
-.task-priority-square {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-    flex-shrink: 0;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-/* Стили для status-square на карточках задач */
-.status-square {
-    width: 16px;
-    height: 16px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    position: relative;
-    flex-shrink: 0;
-}
-.status-square:hover {
-    transform: scale(1.1);
-    border-color: #007bff;
-}
-.status-square[data-priority="low"] {
-    background: linear-gradient(135deg, #28a745, #20c997);
-}
-.status-square[data-priority="medium"] {
-    background: linear-gradient(135deg, #ffc107, #fd7e14);
-}
-.status-square[data-priority="high"] {
-    background: linear-gradient(135deg, #fd7e14, #dc3545);
-}
-.status-square[data-priority="urgent"] {
-    background: linear-gradient(135deg, #dc3545, #e83e8c);
-}
-.status-square[data-priority="critical"] {
-    background: linear-gradient(135deg, #6f42c1, #e83e8c);
-}
-.status-square[data-priority="blocked"] {
-    background: linear-gradient(135deg, #6c757d, #495057);
-}
-/* Стили для мета-информации задачи */
 .task-meta {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
-    font-size: 11px;
+    gap: 15px;
+    margin-bottom: 10px;
+    font-size: 12px;
     color: var(--sketch-dark-gray);
 }
-/* Стили для дат */
-.task-dates {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.date-item {
+.task-time, .task-assignee {
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 11px;
-}
-.date-item i {
-    width: 12px;
-    font-size: 10px;
-}
-/* Стили для аватара пользователя */
-.task-assignee {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: 4px;
-}
-.user-avatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-.user-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.avatar-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    gap: 5px;
 }
 .task-actions {
     display: flex;
     gap: 8px;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.2s ease;
-    position: absolute;
-    top: 8px;
-    right: 8px;
 }
 .task-card:hover .task-actions {
     opacity: 1;
 }
-.action-btn, .task-action-btn {
+.action-btn {
     background: none;
     border: none;
     padding: 6px;
@@ -12367,11 +12268,8 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--sketch-dark-gray);
-    width: 28px;
-    height: 28px;
 }
-.action-btn:hover, .task-action-btn:hover {
+.action-btn:hover {
     background-color: var(--sketch-medium-gray);
 }
 .edit-btn:hover {
@@ -12380,30 +12278,10 @@ a:hover {
 .delete-btn:hover {
     color: var(--sketch-red);
 }
-.archive-btn:hover {
-    color: #6c757d;
-}
 /* Эффекты при перетаскивании */
 .column-content.drag-over {
-    background-color: rgba(0, 123, 255, 0.08);
+    background-color: rgba(0, 123, 255, 0.1);
     border: 2px dashed var(--sketch-blue);
-    border-radius: var(--sketch-radius);
-    transition: all 0.2s ease;
-}
-.column-content.drag-over::before {
-    content: "Отпустите здесь";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--sketch-blue);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    pointer-events: none;
-    z-index: 10;
 }
 /* Адаптивность */
 @media (max-width: 1200px) {
@@ -12434,54 +12312,37 @@ a:hover {
         gap: 8px;
     }
 }
-/* Глобальные стили для тонкого прозрачного скролл-бара */
-*::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-}
-*::-webkit-scrollbar-track {
-    background: transparent;
-}
-*::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-    border: none;
-}
-*::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.4);
-}
-*::-webkit-scrollbar-corner {
-    background: transparent;
-}
-/* Скроллбар для контента колонок */
+/* Скроллбар */
 .column-content::-webkit-scrollbar {
-    width: 4px;
+    width: 8px;
 }
 .column-content::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--sketch-medium-gray);
+    border-radius: var(--sketch-radius);
 }
 .column-content::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-    border: none;
+    background: var(--sketch-dark-gray);
+    border-radius: var(--sketch-radius);
+    border: 1px solid var(--sketch-black);
 }
 .column-content::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--sketch-black);
 }
 /* Скроллбар для kanban доски */
 .kanban-board::-webkit-scrollbar {
-    height: 4px;
+    height: 12px;
 }
 .kanban-board::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--sketch-medium-gray);
+    border-radius: var(--sketch-radius);
 }
 .kanban-board::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 2px;
-    border: none;
+    background: var(--sketch-dark-gray);
+    border-radius: var(--sketch-radius);
+    border: 1px solid var(--sketch-black);
 }
 .kanban-board::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--sketch-black);
 }
 /* Стили для модального окна */
 .modal-content {
@@ -12562,642 +12423,4 @@ a:hover {
     font-weight: inherit !important;
     width: 100% !important;
     color: inherit !important;
-}
-/* Стили для стрелки возврата в заголовке kanban */
-.kanban-title {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-.back-arrow-link {
-    color: var(--sketch-dark-gray);
-    text-decoration: none;
-    border: var(--sketch-border);
-    background-color: var(--sketch-white);
-    border-radius: var(--sketch-radius);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    font-size: 16px;
-}
-.back-arrow-link:hover {
-    color: var(--sketch-blue);
-    background-color: var(--sketch-light-gray);
-    transform: translateY(-2px);
-    box-shadow: var(--sketch-shadow);
-    text-decoration: none;
-}
-.back-arrow-link:active {
-    transform: translateY(0);
-    box-shadow: 2px 2px 0px var(--sketch-black);
-}
-:root {
-    --sketch-primary: #2196F3;
-    --sketch-secondary: #FFC107;
-    --sketch-success: #4CAF50;
-    --sketch-danger: #F44336;
-    --sketch-warning: #FF9800;
-    --sketch-info: #00BCD4;
-    --sketch-light: #F5F5F5;
-    --sketch-dark: #212121;
-    --sketch-white: #FFFFFF;
-    --sketch-black: #000000;
-    --sketch-gray: #9E9E9E;
-    --sketch-light-gray: #F8F9FA;
-    --sketch-dark-gray: #6C757D;
-    --sketch-border: 2px solid #000000;
-    --sketch-border-thin: 1px solid #000000;
-    --sketch-radius: 0px;
-    --sketch-radius-small: 4px;
-    --sketch-shadow: 4px 4px 0px rgba(0, 0, 0, 0.1);
-    --sketch-shadow-hover: 6px 6px 0px rgba(0, 0, 0, 0.15);
-}
-.sidebar {
-    background-color: var(--sketch-white) !important;
-    border-right: var(--sketch-border-thin) !important;
-}
-.active-organization {
-    background-color: var(--sketch-light-gray) !important;
-    color: var(--sketch-primary) !important;
-}
-.list-group-item-action:hover {
-    background-color: var(--sketch-light-gray) !important;
-    transform: translateX(5px);
-    transition: all 0.3s ease;
-}
-/* Новые стили для улучшенного профиля */
-.profile-header {
-  
-    border-radius: 15px;
-    padding: 2rem;
-    color: white;
-    margin-bottom: 2rem;
-}
-.profile-avatar-large {
-    width: 120px;
-    height: 120px;
-    position: relative;
-    flex-shrink: 0;
-}
-.profile-photo {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid rgba(255,255,255,0.3);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-.profile-photo:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 25px rgba(0,0,0,0.15);
-}
-.profile-initials {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    font-weight: bold;
-    color: white;
-    border: 4px solid rgba(255,255,255,0.3);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-}
-.profile-initials:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 25px rgba(0,0,0,0.15);
-}
-.profile-name {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-}
-.profile-details {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    opacity: 0.9;
-}
-.profile-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-.stat-item {
-    background: rgba(255,255,255,0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-weight: 500;
-    backdrop-filter: blur(10px);
-}
-.profile-tabs {
-    border-bottom: none;
-}
-.profile-tabs .nav-tabs {
-    border: none;
-    gap: 0.5rem;
-}
-.profile-tabs .nav-link {
-    border: var(--sketch-border-thin) !important;
-    border-radius: 10px !important;
-    background: white;
-    color: var(--sketch-dark-gray);
-    font-weight: 600;
-    padding: 1rem 1.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-.profile-tabs .nav-link:hover {
-    background: var(--sketch-light-gray);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-.profile-tabs .nav-link.active {
-    background: var(--sketch-primary) !important;
-    color: white !important;
-    border-color: var(--sketch-primary) !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
-}
-.card {
-    border: var(--sketch-border-thin) !important;
-    border-radius: 15px !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-    transition: all 0.3s ease;
-    overflow: hidden;
-}
-.card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
-    transform: translateY(-2px);
-}
-.card-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-    border-bottom: var(--sketch-border-thin) !important;
-    padding: 1.25rem 1.5rem;
-    font-weight: 600;
-}
-.card-body {
-    padding: 1.5rem;
-}
-.photo-upload-section {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 15px;
-    border: 2px dashed var(--sketch-primary);
-    transition: all 0.3s ease;
-}
-.photo-upload-section:hover {
-    border-color: var(--sketch-secondary);
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.1);
-}
-.current-photo {
-    flex-shrink: 0;
-    position: relative;
-}
-.current-photo-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--sketch-primary);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-.current-photo-img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-.no-photo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--sketch-gray) 0%, var(--sketch-dark-gray) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 2rem;
-    border: 3px solid var(--sketch-gray);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-.no-photo:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-}
-.photo-upload-controls {
-    flex-grow: 1;
-}
-.photo-upload-controls .form-control {
-    border: 2px solid #e9ecef !important;
-    border-radius: 10px !important;
-    background: white;
-    transition: all 0.3s ease;
-}
-.photo-upload-controls .form-control:focus {
-    border-color: var(--sketch-primary) !important;
-    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.15) !important;
-}
-.photo-upload-controls .form-text {
-    font-size: 0.875rem;
-    color: var(--sketch-dark-gray);
-    margin-top: 0.5rem;
-    font-style: italic;
-}
-/* Drag & Drop стили */
-.photo-upload-section.drag-over {
-    border-color: var(--sketch-secondary) !important;
-    background: rgba(255, 193, 7, 0.1) !important;
-    transform: scale(1.02);
-}
-.photo-upload-section::after {
-    content: "Или перетащите изображение сюда";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255,255,255,0.9);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: var(--sketch-dark-gray);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    z-index: 10;
-}
-.photo-upload-section:hover::after {
-    opacity: 1;
-}
-.photo-upload-section {
-    position: relative;
-    cursor: pointer;
-}
-/* Улучшенный стиль для input file */
-.photo-upload-controls input[type="file"] {
-    position: relative;
-    padding: 0.75rem 1rem;
-    border: 2px dashed #e9ecef;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.photo-upload-controls input[type="file"]:hover {
-    border-color: var(--sketch-primary);
-    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);
-}
-.photo-upload-controls input[type="file"]:focus {
-    outline: none;
-    border-color: var(--sketch-primary);
-    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.15);
-}
-.form-label {
-    font-weight: 600;
-    color: var(--sketch-dark);
-    margin-bottom: 0.5rem;
-}
-.form-control {
-    border: 2px solid #e9ecef !important;
-    border-radius: 10px !important;
-    padding: 0.75rem 1rem;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-}
-.form-control:focus {
-    border-color: var(--sketch-primary) !important;
-    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.15) !important;
-    transform: translateY(-1px);
-}
-.input-group-text {
-    background: var(--sketch-light-gray);
-    border: 2px solid #e9ecef;
-    border-right: none;
-    color: var(--sketch-dark-gray);
-    font-weight: 500;
-}
-.btn-primary {
-    background: linear-gradient(135deg, var(--sketch-primary) 0%, #1976D2 100%) !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    padding: 0.75rem 2rem;
-    transition: all 0.3s ease;
-}
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
-}
-.btn-warning {
-    background: linear-gradient(135deg, var(--sketch-warning) 0%, #F57C00 100%) !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    color: white !important;
-    padding: 0.75rem 2rem;
-    transition: all 0.3s ease;
-}
-.btn-warning:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
-}
-.btn-lg {
-    padding: 1rem 2.5rem;
-    font-size: 1.1rem;
-}
-.profile-summary .card-body {
-    padding: 1.25rem;
-}
-.info-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--sketch-light-gray);
-}
-.info-item:last-child {
-    border-bottom: none;
-}
-.info-label {
-    font-weight: 600;
-    color: var(--sketch-dark-gray);
-}
-.info-value {
-    font-weight: 500;
-    color: var(--sketch-dark);
-}
-.badge {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 15px;
-}
-.security-tip {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
-    color: var(--sketch-dark-gray);
-}
-.security-tip:last-child {
-    margin-bottom: 0;
-}
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--sketch-light-gray);
-    margin-top: 1.5rem;
-}
-.alert {
-    border: none !important;
-    border-radius: 10px !important;
-    padding: 1rem 1.25rem;
-    font-weight: 500;
-}
-.alert-success {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-    color: #155724;
-}
-.alert-danger {
-    background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%);
-    color: #721c24;
-}
-/* Адаптивность */
-@media (max-width: 768px) {
-    .profile-header {
-        padding: 1.5rem;
-        text-align: center;
-    }
-    
-    .profile-header .row {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-    
-    .profile-avatar-large {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .profile-initials {
-        font-size: 2.5rem;
-    }
-    
-    .profile-name {
-        font-size: 2rem;
-        text-align: center;
-    }
-    
-    .profile-details {
-        text-align: center;
-        font-size: 1rem;
-    }
-    
-    .profile-stats {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-    
-    .stat-item {
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
-    }
-    
-    .profile-tabs .nav-link {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-    }
-    
-    .photo-upload-section {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .current-photo-img,
-    .no-photo {
-        width: 70px;
-        height: 70px;
-    }
-    
-    .no-photo {
-        font-size: 1.75rem;
-    }
-    
-    .form-actions {
-        justify-content: center;
-    }
-}
-@media (max-width: 576px) {
-    .main-content {
-        padding: 1rem !important;
-    }
-    
-    .profile-header {
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .profile-avatar-large {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .profile-initials {
-        font-size: 2rem;
-    }
-    
-    .profile-name {
-        font-size: 1.75rem;
-    }
-    
-    .profile-details {
-        font-size: 0.9rem;
-    }
-    
-    .stat-item {
-        font-size: 0.8rem;
-        padding: 0.3rem 0.6rem;
-    }
-    
-    .profile-tabs .nav-tabs {
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-    
-    .profile-tabs .nav-link {
-        text-align: center;
-        padding: 0.6rem 0.8rem;
-        font-size: 0.85rem;
-    }
-    
-    .current-photo-img,
-    .no-photo {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .no-photo {
-        font-size: 1.5rem;
-    }
-    
-    .photo-upload-section {
-        padding: 1rem;
-    }
-    }
-/* Анимации загрузки */
-.card {
-    animation: fadeInUp 0.6s ease-out;
-}
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-.profile-header {
-    animation: fadeIn 0.8s ease-out;
-}
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-/* Анимации для аватарки */
-.profile-avatar-large {
-    animation: zoomIn 0.6s ease-out;
-}
-@keyframes zoomIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-.photo-upload-section {
-    animation: slideInUp 0.5s ease-out;
-}
-@keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-/* Анимация при смене фото */
-.photo-changing {
-    animation: photoChange 0.5s ease-in-out;
-}
-@keyframes photoChange {
-    0% { transform: scale(1) rotate(0deg); opacity: 1; }
-    50% { transform: scale(0.8) rotate(180deg); opacity: 0.7; }
-    100% { transform: scale(1) rotate(360deg); opacity: 1; }
-}
-/* Индикатор загрузки */
-.photo-loading {
-    position: relative;
-    overflow: hidden;
-}
-.photo-loading::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-    animation: photoLoading 1.5s infinite;
-    z-index: 5;
-}
-@keyframes photoLoading {
-    0% { left: -100%; }
-    100% { left: 100%; }
-}
-/* Индикатор валидности фото */
-.photo-valid {
-    border-color: var(--sketch-success) !important;
-}
-.photo-invalid {
-    border-color: var(--sketch-danger) !important;
-    animation: shake 0.5s ease-in-out;
-}
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
 }
