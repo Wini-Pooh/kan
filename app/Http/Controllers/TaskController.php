@@ -6,15 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Space;
 use App\Models\Column;
+use App\Services\StorageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    public function __construct()
+    protected $storageService;
+
+    public function __construct(StorageService $storageService)
     {
         $this->middleware('auth');
+        $this->storageService = $storageService;
     }
 
     /**
@@ -31,6 +35,24 @@ class TaskController extends Controller
             'status' => 'required|in:todo,progress,done',
             'column_id' => 'nullable|integer|exists:columns,id'
         ]);
+
+        $user = Auth::user();
+        $storageService = new StorageService();
+
+        // Проверяем лимит памяти перед созданием задачи
+        $requiredStorage = StorageService::TASK_CREATION_SIZE_MB;
+        if ($request->description) {
+            $requiredStorage += $storageService->calculateContentSizeMB($request->description);
+        }
+
+        if (!$storageService->checkStorageLimit($user, $requiredStorage)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Недостаточно места для создания задачи. Требуется: ' . 
+                           round($requiredStorage, 3) . ' МБ, доступно: ' . 
+                           $user->available_storage . ' МБ'
+            ], 400);
+        }
 
         // Проверяем права доступа к пространству
         if (!$space->members()->where('user_id', Auth::id())->exists()) {
@@ -62,6 +84,9 @@ class TaskController extends Controller
             'created_by' => Auth::id(),
             'position' => $this->getNextPosition($space, $request->status)
         ]);
+
+        // Учитываем потребление памяти
+        $storageService->trackTaskCreation($user, $task);
 
         return response()->json([
             'success' => true,
@@ -189,7 +214,20 @@ class TaskController extends Controller
         });
 
         if (!empty($updateData)) {
+            // Сохраняем старые значения для учета памяти
+            $oldTitle = $task->title ?? '';
+            $oldDescription = $task->description ?? '';
+            
             $task->update($updateData);
+
+            // Учитываем изменения в памяти
+            if (isset($updateData['title'])) {
+                $this->storageService->trackTaskTitleUpdate(Auth::user(), $task, $oldTitle, $updateData['title']);
+            }
+            
+            if (isset($updateData['description'])) {
+                $this->storageService->trackTaskDescriptionUpdate(Auth::user(), $task, $oldDescription, $updateData['description']);
+            }
         }
 
         return response()->json([
@@ -212,6 +250,9 @@ class TaskController extends Controller
         if ($task->space_id !== $space->id) {
             abort(404, 'Задача не найдена в данном пространстве');
         }
+
+        // Учитываем освобождение памяти перед удалением
+        $this->storageService->trackTaskDeletion(Auth::user(), $task);
 
         $task->delete();
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Space;
 use App\Models\Organization;
 use App\Models\Invitation;
+use App\Services\StorageService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -27,6 +28,18 @@ class SpaceController extends Controller
             'organization_id' => 'required|exists:organizations,id'
         ]);
 
+        $user = Auth::user();
+        $storageService = new StorageService();
+
+        // Проверяем лимит памяти перед созданием пространства
+        if (!$storageService->checkStorageLimit($user, StorageService::SPACE_CREATION_SIZE_MB)) {
+            return redirect()->back()->with('error', 
+                'Недостаточно места для создания пространства. Требуется: ' . 
+                StorageService::SPACE_CREATION_SIZE_MB . ' МБ, доступно: ' . 
+                $user->available_storage . ' МБ'
+            );
+        }
+
         // Проверяем, что пользователь является владельцем организации
         $organization = Organization::findOrFail($request->organization_id);
         if ($organization->owner_id !== Auth::id()) {
@@ -47,6 +60,9 @@ class SpaceController extends Controller
             'access_level' => 'full',
             'status' => 'active'
         ]);
+
+        // Учитываем потребление памяти
+        $storageService->trackSpaceCreation($user, $space);
 
         return redirect()->route('organizations.show', $organization)->with('success', 'Пространство успешно создано!');
     }

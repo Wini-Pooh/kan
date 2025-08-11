@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест кружков приоритетов</title>
+    <style>
+        .priority-selector-compact {
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 12px;
+            background: rgba(248, 249, 250, 0.5);
+            border-radius: 6px;
+            padding: 12px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .priority-selector-header {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .priority-circles-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+
+        .priority-circle-option {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #fff;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            margin: 2px;
+        }
+
+        .priority-circle-option:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            border-width: 3px;
+        }
+
+        .priority-circle-option.active {
+            border-color: #007bff;
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25);
+            transform: scale(1.1);
+            border-width: 3px;
+        }
+
+        .priority-circle-option.low { 
+            background: #28a745;
+        }
+
+        .priority-circle-option.medium { 
+            background: #ffc107;
+        }
+
+        .priority-circle-option.high { 
+            background: #fd7e14;
+        }
+
+        .priority-circle-option.urgent { 
+            background: #dc3545;
+        }
+
+        .priority-circle-option.critical { 
+            background: #6f42c1;
+        }
+
+        .priority-circle-option.blocked { 
+            background: #6c757d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .legend {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin: 5px 10px;
+            font-size: 12px;
+        }
+
+        .legend-circle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест кружков приоритетов</h1>
+    
+    <div class="priority-selector-compact" data-priority="low">
+        <div class="priority-selector-header">Приоритет задачи:</div>
+        <div class="priority-circles-row">
+            <div class="priority-circle-option low active" data-priority="low" onclick="changePriorityTest('low')" title="Низкий"></div>
+            <div class="priority-circle-option medium" data-priority="medium" onclick="changePriorityTest('medium')" title="Средний"></div>
+            <div class="priority-circle-option high" data-priority="high" onclick="changePriorityTest('high')" title="Высокий"></div>
+            <div class="priority-circle-option urgent" data-priority="urgent" onclick="changePriorityTest('urgent')" title="Срочный"></div>
+            <div class="priority-circle-option critical" data-priority="critical" onclick="changePriorityTest('critical')" title="Критический"></div>
+            <div class="priority-circle-option blocked" data-priority="blocked" onclick="changePriorityTest('blocked')" title="Заблокирован"></div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <h3>Легенда приоритетов:</h3>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #28a745;"></span>
+            Низкий
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #ffc107;"></span>
+            Средний
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #fd7e14;"></span>
+            Высокий
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #dc3545;"></span>
+            Срочный
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #6f42c1;"></span>
+            Критический
+        </div>
+        <div class="legend-item">
+            <span class="legend-circle" style="background: #6c757d;"></span>
+            Заблокирован
+        </div>
+    </div>
+
+    <script>
+        function changePriorityTest(priority) {
+            console.log('Изменение приоритета на:', priority);
+            
+            // Убираем класс active у всех кружков
+            document.querySelectorAll('.priority-circle-option').forEach(circle => {
+                circle.classList.remove('active');
+            });
+            
+            // Добавляем класс active к выбранному кружку
+            const selectedCircle = document.querySelector(`.priority-circle-option[data-priority="${priority}"]`);
+            if (selectedCircle) {
+                selectedCircle.classList.add('active');
+                console.log('Активирован кружок:', priority);
+            }
+        }
+    </script>
+</body>
+</html>

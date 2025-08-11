@@ -29,6 +29,16 @@ Route::get('/bootstrap-test', function () {
     return view('bootstrap-test');
 })->name('bootstrap-test');
 
+// CSRF token refresh endpoint
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+})->name('csrf-token');
+
+// CSRF test page
+Route::get('/csrf-test', function () {
+    return view('csrf-test');
+})->name('csrf-test');
+
 // Аутентификация по номеру телефона
 Route::get('/login', [PhoneLoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [PhoneLoginController::class, 'login'])->name('phone.login');
@@ -73,10 +83,31 @@ Route::middleware('auth')->group(function () {
     Route::put('/tasks/{task}/due-date', [TaskViewController::class, 'updateDueDate'])->name('tasks.update.due_date');
     Route::put('/tasks/{task}/assignee', [TaskViewController::class, 'updateAssignee'])->name('tasks.update.assignee');
     Route::post('/tasks/{task}/upload', [TaskViewController::class, 'uploadFile'])->name('tasks.upload');
+    Route::post('/tasks/{task}/upload-document', [TaskViewController::class, 'uploadDocument'])->name('tasks.upload.document');
+    Route::post('/tasks/{task}/upload-multiple', [TaskViewController::class, 'uploadMultiple'])->name('tasks.upload.multiple');
+    Route::post('/tasks/{task}/add-to-block', [TaskViewController::class, 'addToBlock'])->name('tasks.add.to.block');
     Route::delete('/tasks/{task}', [TaskViewController::class, 'destroy'])->name('tasks.destroy');
     Route::get('/tasks/{task}/pdf', [TaskViewController::class, 'downloadPDF'])->name('tasks.download.pdf');
     Route::post('/tasks/{task}/archive', [TaskViewController::class, 'archive'])->name('tasks.archive');
     Route::post('/tasks/{task}/unarchive', [TaskViewController::class, 'unarchive'])->name('tasks.unarchive');
+    
+    // Управление памятью (простая версия)
+    Route::get('/memory', [App\Http\Controllers\SimpleStorageController::class, 'index'])->name('memory.index');
+    Route::get('/memory/plans', [App\Http\Controllers\SimpleStorageController::class, 'plans'])->name('memory.plans');
+    Route::post('/memory/plans/purchase', [App\Http\Controllers\SimpleStorageController::class, 'purchasePlan'])->name('memory.plans.purchase');
+    Route::get('/memory/demo', [App\Http\Controllers\SimpleStorageController::class, 'demo'])->name('memory.demo');
+    Route::post('/memory/simulate', [App\Http\Controllers\SimpleStorageController::class, 'simulate'])->name('memory.simulate');
+    Route::post('/memory/reset-demo', [App\Http\Controllers\SimpleStorageController::class, 'resetDemo'])->name('memory.reset-demo');
+    
+    // API для управления памятью пространств
+    Route::prefix('api/storage')->group(function () {
+        Route::get('/spaces/{space}/stats', [App\Http\Controllers\SpaceStorageController::class, 'getSpaceStorageStats'])->name('api.storage.space.stats');
+        Route::get('/spaces-stats', [App\Http\Controllers\SpaceStorageController::class, 'getUserSpacesStats'])->name('api.storage.spaces.stats');
+        Route::post('/sync', [App\Http\Controllers\SpaceStorageController::class, 'syncUserStorage'])->name('api.storage.sync');
+        Route::get('/tips', [App\Http\Controllers\SpaceStorageController::class, 'getOptimizationTips'])->name('api.storage.tips');
+        Route::get('/spaces/{space}/analyze', [App\Http\Controllers\SpaceStorageController::class, 'analyzeSpaceTasks'])->name('api.storage.space.analyze');
+        Route::post('/cleanup', [App\Http\Controllers\SpaceStorageController::class, 'cleanupArchivedTasks'])->name('api.storage.cleanup');
+    });
 });
 
 // Маршруты для приглашений

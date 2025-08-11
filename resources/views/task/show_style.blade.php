@@ -35,6 +35,22 @@
     font-size: 16px;
 }
 
+/* Мобильная обертка для шапки */
+.mobile-header-wrapper {
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .mobile-header-wrapper {
+        position: sticky;
+        top: 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+}
+
 .task-title-container {
     display: flex;
     align-items: center;
@@ -521,18 +537,243 @@
     font-size: 14px;
 }
 
+/* Компактный селектор приоритетов */
+.priority-selector-compact {
+  padding: 12px 0;
+    border-bottom: none;
+    margin-bottom: 0;
+    background: rgba(248, 249, 250, 0.5);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.priority-selector-header {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.priority-circles-row {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+}
+
+.priority-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.priority-item:hover {
+    background: rgba(0, 123, 255, 0.1);
+}
+
+.priority-item.active {
+    background: rgba(0, 123, 255, 0.2);
+}
+
+.priority-item.active .priority-label {
+    color: #007bff;
+    font-weight: 600;
+}
+
+.priority-label {
+    font-size: 10px;
+    color: #6c757d;
+    font-weight: 500;
+    text-align: center;
+    min-height: 12px;
+    line-height: 1;
+}
+
+.priority-circle-option {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid #fff;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    margin: 2px;
+}
+
+.priority-circle-option:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    border-width: 3px;
+}
+
+.priority-circle-option.active {
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25);
+    transform: scale(1.1);
+    border-width: 3px;
+}
+
+.priority-circle-option.low { 
+    background-color: #28a745 !important;
+}
+
+.priority-circle-option.medium { 
+    background-color: #ffc107 !important;
+}
+
+.priority-circle-option.high { 
+    background-color: #fd7e14 !important;
+}
+
+.priority-circle-option.urgent { 
+    background-color: #dc3545 !important;
+}
+
+.priority-circle-option.critical { 
+    background-color: #6f42c1 !important;
+}
+
+.priority-circle-option.blocked { 
+    background-color: #6c757d !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-    .task-header-fixed .col-md-4 {
-        margin-bottom: 10px;
+    .task-header-fixed {
+        padding: 8px 0;
+        position: relative;
+    }
+    
+    .task-header-fixed .container-fluid {
+        padding: 0 15px;
+    }
+    
+    .task-header-fixed .row {
+        margin: 0;
+        flex-direction: column !important;
+        gap: 10px;
+    }
+    
+    .task-header-fixed .col-md-4,
+    .task-header-fixed .col-4 {
+        flex: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 0;
+    }
+    
+    .task-title-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
     }
     
     .task-title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        flex: 1;
+        margin: 0;
+        padding: 6px 8px;
+    }
+    
+    .back-to-kanban-btn {
+        width: 35px;
+        height: 35px;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+    
+    .back-to-kanban-btn i {
+        font-size: 14px;
+    }
+    
+    /* Центральная секция с приоритетом и действиями */
+    .task-header-fixed .col-md-4.text-center,
+    .task-header-fixed .col-4.text-center {
+        text-align: left !important;
+    }
+    
+    .task-header-fixed .col-md-4.text-center .d-flex,
+    .task-header-fixed .col-4.text-center .d-flex {
+        justify-content: flex-start !important;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+    }
+    
+    /* Правая секция с исполнителем */
+    .task-header-fixed .col-md-4.text-end,
+    .task-header-fixed .col-4.text-end {
+        text-align: left !important;
+    }
+    
+    .task-header-fixed .col-md-4.text-end .d-flex,
+    .task-header-fixed .col-4.text-end .d-flex {
+        justify-content: flex-start !important;
+        align-items: center;
+        gap: 12px;
     }
     
     .assignee-name {
         display: none;
+    }
+    
+    /* Упрощаем действия на мобильных */
+    .task-actions {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+    
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+    
+    .action-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Статус квадрат */
+    .status-square {
+        width: 32px;
+        height: 32px;
+        margin: 0;
+        flex-shrink: 0;
+    }
+    
+    /* Иконка времени */
+    .time-icon {
+        font-size: 16px;
+        padding: 6px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+    }
+    
+    .time-icon:hover {
+        background-color: #f8f9fa;
+    }
+    
+    /* Статус квадрат */
+    .status-square {
+        width: 35px;
+        height: 35px;
+        margin: 0;
     }
 }
 
@@ -717,6 +958,228 @@
     text-align: center;
     margin-top: 10px;
     font-size: 14px;
+}
+
+/* Стили для компактной панели форматирования */
+.format-toolbar {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.format-toolbar-content {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px;
+}
+
+.format-group {
+    position: relative;
+    display: inline-block;
+}
+
+.format-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 28px;
+    white-space: nowrap;
+}
+
+.format-btn:hover {
+    background: #f5f5f5;
+    border-color: #999;
+}
+
+.format-btn:active {
+    background: #e0e0e0;
+}
+
+.format-dropdown-btn {
+    border-radius: 4px;
+    position: relative;
+    min-width: 32px;
+    justify-content: space-between;
+}
+
+.format-arrow {
+    font-size: 10px;
+    margin-left: 4px;
+    transition: transform 0.2s ease;
+}
+
+.format-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10001;
+    min-width: 160px;
+    max-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    margin-top: 2px;
+}
+
+.format-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.format-dropdown .format-btn {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 8px 12px;
+    text-align: left;
+    justify-content: flex-start;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.format-dropdown .format-btn:last-child {
+    border-bottom: none;
+    border-radius: 0 0 6px 6px;
+}
+
+.format-dropdown .format-btn:first-child {
+    border-radius: 6px 6px 0 0;
+}
+
+.format-dropdown .format-btn:hover {
+    background: #007bff;
+    color: white;
+}
+
+.format-color-dropdown {
+    min-width: 140px;
+}
+
+.color-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+}
+
+.format-divider {
+    width: 1px;
+    height: 24px;
+    background: #ddd;
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+/* Адаптивность для панели форматирования */
+@media (max-width: 768px) {
+    .format-toolbar {
+        max-width: 280px;
+        font-size: 12px;
+    }
+    
+    .format-btn {
+        padding: 4px 6px;
+        font-size: 11px;
+        min-height: 26px;
+    }
+    
+    .format-dropdown {
+        min-width: 140px;
+        font-size: 11px;
+    }
+    
+    .format-dropdown .format-btn {
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .format-toolbar {
+        max-width: 240px;
+        font-size: 11px;
+    }
+    
+    .format-toolbar-content {
+        gap: 1px;
+    }
+    
+    .format-btn {
+        padding: 3px 5px;
+        font-size: 10px;
+        min-height: 24px;
+    }
+    
+    .format-dropdown {
+        min-width: 120px;
+        font-size: 10px;
+    }
+    
+    .format-arrow {
+        font-size: 8px;
+    }
+}
+
+/* Улучшенные стили для лучшего UX */
+.format-btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 1px;
+}
+
+.format-dropdown-btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 1px;
+}
+
+.format-dropdown .format-btn:focus {
+    outline: none;
+    background: #007bff;
+    color: white;
+}
+
+/* Стили для активных состояний форматирования */
+.format-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.format-btn.active:hover {
+    background: #0056b3;
+}
+
+/* Анимации для выпадающих меню */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.format-dropdown.show {
+    animation: fadeInDown 0.2s ease-out;
 }
 
 /* Автосохранение индикатор */
@@ -1203,6 +1666,38 @@
     font-style: italic;
 }
 
+/* Поддержка цветного и стилизованного текста */
+.text-content span[style] {
+    color: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    text-decoration: inherit;
+}
+
+.text-content span[style*="color"] {
+    /* Явно разрешаем цвет из inline стилей */
+}
+
+.text-content span[style*="font-weight: bold"],
+.text-content span[style*="font-weight:bold"] {
+    font-weight: bold !important;
+}
+
+.text-content span[style*="font-style: italic"],
+.text-content span[style*="font-style:italic"] {
+    font-style: italic !important;
+}
+
+.text-content span[style*="text-decoration: underline"],
+.text-content span[style*="text-decoration:underline"] {
+    text-decoration: underline !important;
+}
+
+.text-content span[style*="text-decoration: line-through"],
+.text-content span[style*="text-decoration:line-through"] {
+    text-decoration: line-through !important;
+}
+
 /* Блоки изображений */
 .image-block .block-content {
     text-align: center;
@@ -1282,14 +1777,63 @@
     border: 1px solid #dee2e6;
     border-radius: 6px;
     padding: 4px;
-    display: none;
+    display: flex;
     gap: 4px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 20;
+}
+
+/* Добавляем невидимую область для плавного перехода курсора */
+.block-toolbar::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -10px;
+    right: -10px;
+    height: 15px;
+    background: transparent;
+    z-index: -1;
 }
 
 .content-block:hover .block-toolbar,
-.content-block.active .block-toolbar {
-    display: flex;
+.content-block.active .block-toolbar,
+.swiper-block:hover .block-toolbar,
+.swiper-block.active .block-toolbar,
+.block-toolbar:hover {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Принудительное отображение панели инструментов в разблокированном режиме */
+body:not(.content-locked) .content-block:hover .block-toolbar,
+body:not(.content-locked) .content-block.active .block-toolbar,
+body:not(.content-locked) .swiper-block:hover .block-toolbar,
+body:not(.content-locked) .swiper-block.active .block-toolbar,
+body:not(.content-locked) .block-toolbar:hover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    display: flex !important;
+}
+
+/* Расширяем область hover для более стабильного отображения */
+.content-block::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: 0;
+    width: 150px;
+    height: 20px;
+    background: transparent;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.content-block:hover::before {
+    pointer-events: auto;
 }
 
 .block-btn {
@@ -1378,7 +1922,9 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 400px;
 }
 
 .toolbar-icon {
@@ -1433,6 +1979,549 @@
 
 .toolbar-icon:active {
     transform: translateY(0);
+}
+
+/* Стили для заблокированного состояния */
+.toolbar-icon.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.toolbar-icon.disabled:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: rgba(222, 226, 230, 0.6);
+}
+
+.toolbar-icon.disabled:hover::before {
+    opacity: 0;
+}
+
+.toolbar-icon.disabled:hover i {
+    color: #6c757d;
+}
+
+/* Кнопка блокировки всегда должна оставаться активной */
+.toolbar-icon.lock-icon {
+    opacity: 1 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* Стили для аватара создателя в toolbar */
+.creator-avatar-container {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: auto;
+}
+
+.creator-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #28a745;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    transition: all 0.2s ease;
+}
+
+.creator-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+/* Стили для исполнителя в toolbar */
+.assignee-container {
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.assignee-avatar-toolbar, .no-assignee-toolbar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: rgba(248, 249, 250, 0.8);
+    border: 4px solid #007bff;
+    position: relative;
+    overflow: hidden;
+}
+
+.assignee-avatar-toolbar:hover, .no-assignee-toolbar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,123,255,0.25);
+    border-color: #0056b3;
+}
+
+.assignee-avatar-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.no-assignee-toolbar {
+    background: rgba(248, 249, 250, 0.8);
+    color: #6c757d;
+    font-size: 18px;
+}
+
+.no-assignee-toolbar:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* Стили для цветной обводки аватара по приоритетам */
+.assignee-avatar-toolbar[data-priority="low"] {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+}
+
+.assignee-avatar-toolbar[data-priority="medium"] {
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+}
+
+.assignee-avatar-toolbar[data-priority="high"] {
+    border-color: #fd7e14 !important;
+    box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.2);
+}
+
+.assignee-avatar-toolbar[data-priority="urgent"] {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+}
+
+.assignee-avatar-toolbar[data-priority="critical"] {
+    border-color: #6f42c1 !important;
+    box-shadow: 0 0 0 2px rgba(111, 66, 193, 0.2);
+}
+
+.assignee-avatar-toolbar[data-priority="blocked"] {
+    border-color: #6c757d !important;
+    box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.2);
+}
+
+/* Эффекты при наведении с учетом приоритетов */
+.assignee-avatar-toolbar[data-priority="low"]:hover {
+    border-color: #1e7e34 !important;
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+.assignee-avatar-toolbar[data-priority="medium"]:hover {
+    border-color: #d39e00 !important;
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+}
+
+.assignee-avatar-toolbar[data-priority="high"]:hover {
+    border-color: #e55812 !important;
+    box-shadow: 0 6px 20px rgba(253, 126, 20, 0.3);
+}
+
+.assignee-avatar-toolbar[data-priority="urgent"]:hover {
+    border-color: #bd2130 !important;
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+}
+
+.assignee-avatar-toolbar[data-priority="critical"]:hover {
+    border-color: #59359a  !important;
+    box-shadow: 0 6px 20px rgba(111, 66, 193, 0.3);
+}
+
+.assignee-avatar-toolbar[data-priority="blocked"]:hover {
+    border-color: #545b62 !important;
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+}
+
+/* Центральная группа кнопок */
+.toolbar-center-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    justify-content: center;
+}
+
+/* Специальные стили для assignee-menu в toolbar */
+.bottom-toolbar-fixed .assignee-menu {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    top: auto;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+/* Стили для иконки блокировки */
+.toolbar-icon.lock-icon {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: rgba(220, 53, 69, 0.3);
+    color: #dc3545;
+}
+
+.toolbar-icon.lock-icon.unlocked {
+    background: rgba(40, 167, 69, 0.1);
+    border-color: rgba(40, 167, 69, 0.3);
+    color: #28a745;
+}
+
+.toolbar-icon.lock-icon::before {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.toolbar-icon.lock-icon.unlocked::before {
+    background: linear-gradient(135deg, #28a745, #218838);
+}
+
+/* Заблокированное состояние для контента */
+.content-locked .content-canvas {
+    pointer-events: none;
+}
+
+/* Исключения для интерактивных элементов в заблокированном режиме */
+.content-locked .content-canvas img,
+.content-locked .content-canvas .swiper-navigation,
+.content-locked .content-canvas .swiper-pagination-bullet,
+.content-locked .content-canvas .download-btn,
+.content-locked .content-canvas .btn[href],
+.content-locked .content-canvas a[href],
+.content-locked .content-canvas .file-download-link {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Исключения для блоков слайдеров и файлов */
+.content-locked .content-canvas .swiper-block,
+.content-locked .content-canvas .file-grid-block,
+.content-locked .content-canvas .image-block,
+.content-locked .content-canvas .document-block {
+    pointer-events: auto !important;
+}
+
+/* Элементы слайдера должны работать в заблокированном режиме */
+.content-locked .swiper-navigation,
+.content-locked .swiper-pagination,
+.content-locked .swiper-pagination-bullet,
+.content-locked .swiper-prev,
+.content-locked .swiper-next {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Интерактивные элементы файлов */
+.content-locked .document-actions .btn,
+.content-locked .file-grid-item .download-btn,
+.content-locked .file-grid-item a[href] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Но блокируем редактирование внутри этих блоков */
+.content-locked .content-canvas .swiper-block .block-toolbar,
+.content-locked .content-canvas .file-grid-block .block-toolbar,
+.content-locked .content-canvas .image-block .block-toolbar,
+.content-locked .content-canvas .document-block .block-toolbar {
+    pointer-events: none !important;
+    display: none !important;
+}
+
+.content-locked .editable-content {
+    cursor: default;
+}
+
+.content-locked .block-actions {
+    display: none !important;
+}
+
+.content-locked .block-toolbar {
+    display: none !important;
+}
+
+/* Исключения для навигационных кнопок в заблокированном режиме */
+.content-locked .back-to-kanban-btn,
+.content-locked .print-btn,
+.content-locked .pdf-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Модальные окна должны работать поверх заблокированного контента */
+.modal,
+.modal-backdrop,
+.modal-dialog,
+.modal-content {
+    pointer-events: auto !important;
+    z-index: 9999 !important;
+}
+
+/* Кнопки закрытия модальных окон */
+.modal .btn-close,
+.modal .close,
+.modal [data-bs-dismiss="modal"] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Исключения для заголовка с кнопками навигации */
+.content-locked .task-header-fixed {
+    pointer-events: auto !important;
+}
+
+/* Исключения для всех кнопок действий в заголовке */
+.content-locked .task-header-fixed .back-to-kanban-btn,
+.content-locked .task-header-fixed .print-btn,
+.content-locked .task-header-fixed .pdf-btn,
+.content-locked .task-header-fixed .action-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Но блокируем редактирование внутри заголовка */
+.content-locked .task-header-fixed .editable-content,
+.content-locked .task-header-fixed .task-title,
+.content-locked .task-header-fixed [contenteditable] {
+    pointer-events: none !important;
+}
+
+.content-locked .drag-handle {
+    display: none !important;
+}
+
+.content-locked .content-block:hover {
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+}
+
+.content-locked .content-block:hover .block-toolbar {
+    display: none !important;
+}
+
+.content-locked .content-block.active {
+    outline: none;
+    box-shadow: none;
+}
+
+.content-locked .content-block.active .block-toolbar {
+    display: none !important;
+}
+
+/* Заблокированное состояние для заголовка */
+.content-locked .task-title {
+    cursor: default !important;
+    pointer-events: none;
+}
+
+.content-locked .status-square {
+    cursor: default !important;
+    pointer-events: none;
+}
+
+.content-locked .status-square:hover {
+    transform: none !important;
+}
+
+.content-locked .time-icon {
+    cursor: default !important;
+    pointer-events: none;
+}
+
+.content-locked .time-icon:hover {
+    transform: none !important;
+    color: #6c757d !important;
+}
+
+.content-locked .assignee-avatar,
+.content-locked .no-assignee {
+    cursor: default !important;
+    pointer-events: none;
+}
+
+.content-locked .assignee-avatar:hover,
+.content-locked .no-assignee:hover {
+    transform: none !important;
+}
+
+.content-locked .page-actions {
+    display: none !important;
+}
+
+.content-locked .page-content[onclick] {
+    pointer-events: none !important;
+}
+
+/* Разрешаем выделение и копирование текста в заблокированном режиме, но запрещаем редактирование */
+.content-locked .text-content,
+.content-locked .image-caption,
+.content-locked p,
+.content-locked div,
+.content-locked span,
+.content-locked h1,
+.content-locked h2,
+.content-locked h3,
+.content-locked h4,
+.content-locked h5,
+.content-locked h6 {
+    user-select: text !important;
+    cursor: text !important;
+    pointer-events: none !important;
+}
+
+/* Запрещаем редактирование всех contenteditable элементов */
+.content-locked [contenteditable],
+.content-locked .editable-content,
+.content-locked .text-block,
+.content-locked .content-block[contenteditable] {
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    user-modify: read-only !important;
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+/* Исключения для навигационных кнопок должны быть приоритетнее */
+.content-locked .back-to-kanban-btn,
+.content-locked .print-btn,
+.content-locked .pdf-btn,
+.content-locked .action-btn,
+.content-locked .back-to-kanban-btn *,
+.content-locked .print-btn *,
+.content-locked .pdf-btn *,
+.content-locked .action-btn * {
+    -webkit-user-modify: inherit !important;
+    -moz-user-modify: inherit !important;
+    user-modify: inherit !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Полное отключение всех событий редактирования */
+.content-locked [contenteditable="false"],
+.content-locked .text-content,
+.content-locked .content-block {
+    pointer-events: none !important;
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    user-modify: read-only !important;
+}
+
+/* Исключения для навигационных кнопок в любом месте */
+.content-locked .back-to-kanban-btn,
+.content-locked .print-btn,
+.content-locked .pdf-btn,
+.content-locked .action-btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    -webkit-user-modify: inherit !important;
+    -moz-user-modify: inherit !important;
+    user-modify: inherit !important;
+}
+
+/* Специальное правило для разрешения выделения текста без редактирования */
+.content-locked .text-content *,
+.content-locked .content-block * {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+}
+
+/* Запрещаем фокус и редактирование */
+.content-locked *[contenteditable]:focus,
+.content-locked .editable-content:focus,
+.content-locked .text-block:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Полное отключение редактирования */
+.content-locked * {
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    user-modify: read-only !important;
+}
+
+/* Исключения для навигационных кнопок и элементов управления */
+.content-locked .back-to-kanban-btn,
+.content-locked .print-btn,
+.content-locked .pdf-btn,
+.content-locked .back-to-kanban-btn *,
+.content-locked .print-btn *,
+.content-locked .pdf-btn * {
+    -webkit-user-modify: inherit !important;
+    -moz-user-modify: inherit !important;
+    user-modify: inherit !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Исключения для изображений, чтобы они оставались кликабельными */
+.content-locked .block-image,
+.content-locked .gallery-item img,
+.content-locked .image-container img {
+    -webkit-user-modify: initial !important;
+    -moz-user-modify: initial !important;
+    user-modify: initial !important;
+}
+
+/* Разрешаем клики по изображениям для просмотра */
+.content-locked .block-image,
+.content-locked .gallery-item img,
+.content-locked .image-container img {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.content-locked .block-image:hover,
+.content-locked .gallery-item img:hover,
+.content-locked .image-container img:hover {
+    transform: scale(1.02) !important;
+    transition: transform 0.2s ease !important;
+}
+
+/* Разрешаем работу с галереей изображений */
+.content-locked .gallery-item,
+.content-locked .image-container {
+    pointer-events: auto !important;
+}
+
+.content-locked .image-overlay {
+    pointer-events: auto !important;
+}
+
+/* Полное скрытие всех панелей инструментов блоков в заблокированном режиме */
+.content-locked * .block-toolbar,
+.content-locked .block-toolbar {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Предотвращение всех hover эффектов для блоков в заблокированном режиме */
+.content-locked .content-block:hover .block-toolbar,
+.content-locked .text-block:hover .block-toolbar,
+.content-locked .image-block:hover .block-toolbar,
+.content-locked .file-block:hover .block-toolbar,
+.content-locked .gallery-block:hover .block-toolbar,
+.content-locked .swiper-block:hover .block-toolbar {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Скрыть кнопки удаления отдельных изображений в заблокированном режиме */
+.content-locked .image-delete-btn {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
 }
 
 /* Адаптивность для мобильных устройств */
@@ -1786,31 +2875,366 @@
 /* Адаптивность */
 @media (max-width: 768px) {
     .task-header-fixed {
-        padding: 10px 0;
+        padding: 8px 0;
+        position: relative;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .task-header-fixed .container-fluid {
+        padding: 0 15px;
+    }
+    
+    .task-header-fixed .row {
+        margin: 0;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .task-header-fixed .col-md-4 {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+    }
+    
+    /* Заголовок с кнопкой возврата */
+    .task-title-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
     }
     
     .task-title {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
+        flex: 1;
+        margin: 0;
+        padding: 6px 8px;
+        line-height: 1.3;
     }
     
     .task-title-input {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
+        flex: 1;
     }
     
+    .back-to-kanban-btn {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+    
+    .back-to-kanban-btn i {
+        font-size: 13px;
+    }
+    
+    /* Центральная секция */
+    .task-header-fixed .col-md-4.text-center {
+        text-align: left !important;
+    }
+    
+    .task-header-fixed .col-md-4.text-center .d-flex {
+        justify-content: flex-start !important;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    /* Правая секция */
+    .task-header-fixed .col-md-4.text-end {
+        text-align: left !important;
+    }
+    
+    .task-header-fixed .col-md-4.text-end .d-flex {
+        justify-content: flex-start !important;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .assignee-name {
+        display: none;
+    }
+    
+    /* Упрощаем действия */
+    .task-actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        padding: 6px;
+    }
+    
+    .action-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .action-btn i {
+        font-size: 12px;
+    }
+    
+    /* Статус квадрат */
+    .status-square {
+        width: 32px;
+        height: 32px;
+        margin: 0;
+    }
+    
+    /* Иконка времени */
+    .time-icon {
+        font-size: 16px;
+        padding: 6px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .time-icon:hover {
+        background-color: #f8f9fa;
+    }
+    
+    /* Исполнитель */
+    .assignee-avatar .user-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .no-assignee {
+        font-size: 12px;
+        padding: 6px 8px;
+        border-radius: 4px;
+        border: 1px solid #dee2e6;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .no-assignee:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .no-assignee i {
+        font-size: 14px;
+        margin-right: 4px;
+    }
+    
+    /* Выпадающие меню */
     .status-menu,
     .date-picker-container,
     .assignee-menu {
-        min-width: 240px;
+        min-width: 280px;
+        max-width: calc(100vw - 30px);
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
     }
     
-    .col-md-4 {
-        margin-bottom: 10px;
+    .date-picker-container {
+        min-width: 300px;
+    }
+}
+
+/* Дополнительная адаптивность для очень маленьких экранов */
+@media (max-width: 576px) {
+    .task-header-fixed {
+        padding: 6px 0;
     }
     
-    .col-md-4.text-center,
-    .col-md-4.text-end {
-        text-align: left !important;
+    .task-header-fixed .container-fluid {
+        padding: 0 10px;
     }
+    
+    .task-title {
+        font-size: 1rem;
+        padding: 4px 6px;
+    }
+    
+    .task-title-input {
+        font-size: 1rem;
+    }
+    
+    .back-to-kanban-btn {
+        width: 28px;
+        height: 28px;
+        margin-right: 6px;
+    }
+    
+    .back-to-kanban-btn i {
+        font-size: 12px;
+    }
+    
+    .action-btn,
+    .status-square,
+    .time-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .action-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+    
+    .action-btn i {
+        font-size: 11px;
+    }
+    
+    .time-icon {
+        font-size: 14px;
+    }
+    
+    .assignee-avatar .user-avatar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .no-assignee {
+        font-size: 11px;
+        padding: 4px 6px;
+    }
+    
+    .no-assignee i {
+        font-size: 12px;
+    }
+    
+    .status-menu,
+    .assignee-menu {
+        min-width: 260px;
+        max-width: calc(100vw - 20px);
+    }
+    
+    .date-picker-container {
+        min-width: 280px;
+        max-width: calc(100vw - 20px);
+    }
+    
+    /* Скрываем подписи на очень маленьких экранах */
+    .no-assignee span {
+        display: none;
+    }
+    
+    .no-assignee i {
+        margin: 0;
+    }
+    
+    /* Улучшаем выпадающие меню для очень маленьких экранов */
+    .priority-option {
+        padding: 10px 12px;
+    }
+    
+    .priority-option span {
+        font-size: 14px;
+    }
+    
+    .assignee-option {
+        padding: 10px 12px;
+    }
+    
+    .user-avatar-small img {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Дополнительные мобильные улучшения */
+@media (max-width: 480px) {
+    .task-header-fixed .row {
+        gap: 6px;
+    }
+    
+    .task-header-fixed .d-flex {
+        gap: 8px !important;
+    }
+    
+    .back-to-kanban-btn {
+        width: 26px;
+        height: 26px;
+        margin-right: 4px;
+    }
+    
+    .back-to-kanban-btn i {
+        font-size: 11px;
+    }
+    
+    .task-title {
+        font-size: 0.9rem;
+        padding: 3px 5px;
+    }
+    
+    .action-btn,
+    .status-square,
+    .time-icon {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .action-btn svg {
+        width: 11px;
+        height: 11px;
+    }
+    
+    .time-icon {
+        font-size: 13px;
+    }
+    
+    .assignee-avatar .user-avatar {
+        width: 26px;
+        height: 26px;
+    }
+}
+
+/* Мобильные классы JavaScript */
+.mobile-view .status-menu,
+.mobile-view .date-picker-container,
+.mobile-view .assignee-menu {
+    position: fixed !important;
+    z-index: 9999 !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important;
+}
+
+.mobile-view .status-menu {
+    animation: slideInUp 0.2s ease-out;
+}
+
+.mobile-view .date-picker-container {
+    animation: slideInUp 0.2s ease-out;
+}
+
+.mobile-view .assignee-menu {
+    animation: slideInUp 0.2s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Overlay для мобильных меню */
+.mobile-view .status-menu:not(.d-none)::before,
+.mobile-view .date-picker-container:not(.d-none)::before,
+.mobile-view .assignee-menu:not(.d-none)::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.1);
+    z-index: -1;
+    pointer-events: none;
 }
 
 /* === СИСТЕМА ЛИСТОВ A4 === */
@@ -2063,38 +3487,141 @@
     font-style: italic;
 }
 
-/* Панель инструментов блока */
-.block-toolbar {
-    position: absolute;
-    top: -35px;
-    right: 0;
+/* Стили для Swiper блоков */
+.swiper-block {
+    position: relative;
+}
+
+.swiper-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.swiper-wrapper {
     display: flex;
-    gap: 5px;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.swiper-slide {
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.swiper-slide img,
+.swiper-slide video {
+    max-width: 100%;
+    max-height: 100%;
+       object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Кнопка удаления отдельного изображения в swiper */
+.swiper-slide .image-delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
     opacity: 0;
     visibility: hidden;
     transition: all 0.2s ease;
-    z-index: 10;
+    z-index: 15;
 }
 
-.content-block:hover .block-toolbar,
-.content-block.active .block-toolbar {
+.swiper-slide:hover .image-delete-btn {
     opacity: 1;
     visibility: visible;
 }
 
-.block-btn {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: all 0.2s ease;
+.swiper-slide .image-delete-btn:hover {
+    background: rgba(220, 53, 69, 1);
+    transform: scale(1.1);
 }
 
-.block-btn:hover {
-    background: #0056b3;
+/* Навигация Swiper */
+.swiper-navigation {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.3s ease;
+}
+
+.swiper-navigation:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.swiper-prev {
+    left: 10px;
+}
+
+.swiper-next {
+    right: 10px;
+}
+
+/* Пагинация Swiper */
+.swiper-pagination {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.swiper-pagination-bullet.active {
+    background: white;
+}
+
+/* Счетчик Swiper */
+.swiper-counter {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 10;
 }
 
 .block-btn.delete-btn {
@@ -2199,7 +3726,7 @@
     .a4-page {
         width: 100%;
         min-height: auto;
-        transform: scale(0.8);
+        transform: scale(0.85);
         transform-origin: top center;
         margin-bottom: 20px;
     }
@@ -2220,8 +3747,34 @@
 }
 
 @media (max-width: 768px) {
+    .task-content {
+        margin-top: 20px;
+        padding: 10px;
+    }
+    
+    .content-canvas {
+        padding: 10px;
+        background: #f8f9fa;
+    }
+    
     .a4-page {
-        transform: scale(0.7);
+        width: 100%;
+        min-height: 400px;
+        transform: none;
+        transform-origin: none;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: visible;
+    }
+    
+    .page-header {
+        padding: 8px 15px;
+        font-size: 11px;
+    }
+    
+    .page-content {
+        padding: 15px;
+        min-height: 300px;
     }
     
     .toolbar-btn span {
@@ -2230,13 +3783,66 @@
     
     .canvas-toolbar {
         padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .toolbar-section {
+        gap: 10px;
+    }
+    
+    .toolbar-buttons {
+        gap: 8px;
+    }
+    
+    .toolbar-btn {
+        min-width: 40px;
+        padding: 8px;
     }
     
     .auto-save-indicator {
-        bottom: 20px;
-        right: 20px;
-        padding: 8px 12px;
-        font-size: 12px;
+        bottom: 15px;
+        right: 15px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 576px) {
+    .task-content {
+        margin-top: 15px;
+        padding: 5px;
+    }
+    
+    .content-canvas {
+        padding: 5px;
+        border-radius: 4px;
+    }
+    
+    .a4-page {
+        margin-bottom: 10px;
+        min-height: 350px;
+        border-radius: 6px;
+    }
+    
+    .page-header {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+    
+    .page-content {
+        padding: 12px;
+        min-height: 250px;
+    }
+    
+    .canvas-toolbar {
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+    
+    .toolbar-btn {
+        min-width: 35px;
+        padding: 6px;
+        font-size: 14px;
     }
 }
 

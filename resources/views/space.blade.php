@@ -86,13 +86,13 @@
                 @endif
             </a>
             
-            <!-- Кнопки действий для всех устройств -->
-            <a href="#" onclick="createNewColumn(); return false;" class="btn btn-sm btn-success" title="Добавить новую колонку">
-                <i class="fas fa-plus"></i>
-            </a>
-            <a href="#" onclick="showHiddenColumns(); return false;" class="btn btn-sm btn-info" title="Показать скрытые колонки">
-                <i class="fas fa-eye"></i>
-            </a>
+                {{-- <!-- Кнопки действий для всех устройств -->
+                <a href="#" onclick="createNewColumn(); return false;" class="btn btn-sm btn-success" title="Добавить новую колонку">
+                    <i class="fas fa-plus"></i>
+                </a>
+                <a href="#" onclick="showHiddenColumns(); return false;" class="btn btn-sm btn-info" title="Показать скрытые колонки">
+                    <i class="fas fa-eye"></i>
+                </a> --}}
         </div>
     </div>
     

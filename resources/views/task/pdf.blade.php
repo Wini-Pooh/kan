@@ -116,28 +116,116 @@
         
         /* Стили для изображений в PDF */
         .task-content img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 4px;
-            margin: 10px 0;
-            display: block;
-            page-break-inside: avoid;
+            max-width: 100% !important;
+            height: auto !important;
+            max-height: 400px !important;
+            border: 1px solid #ddd !important;
+            border-radius: 4px !important;
+            padding: 4px !important;
+            margin: 10px auto !important;
+            display: block !important;
+            page-break-inside: avoid !important;
         }
         
         .task-content div {
-            page-break-inside: avoid;
-            margin: 10px 0;
+            page-break-inside: avoid !important;
+            margin: 10px 0 !important;
         }
         
         /* Стили для подписей к изображениям */
         .task-content p[style*="font-style: italic"] {
-            text-align: center;
-            font-size: 10pt;
-            color: #666;
-            margin: 5px 0;
-            page-break-before: avoid;
+            text-align: center !important;
+            font-size: 10pt !important;
+            color: #666 !important;
+            margin: 5px 0 !important;
+            page-break-before: avoid !important;
+            font-style: italic !important;
+        }
+        
+        /* Стили для заголовков блоков */
+        .task-content h4[style*="color: #495057"] {
+            color: #495057 !important;
+            font-size: 14pt !important;
+            margin: 0 0 15px 0 !important;
+            font-weight: bold !important;
+        }
+        
+        /* Стили для видео блоков */
+        .task-content span[style*="background: #dc3545"] {
+            background: #dc3545 !important;
+            color: white !important;
+        }
+        
+        /* Стили для ссылок в PDF */
+        .task-content a {
+            color: #007bff !important;
+            text-decoration: underline !important;
+            font-weight: bold !important;
+            word-break: break-all;
+        }
+        
+        .task-content a:hover {
+            color: #0056b3 !important;
+        }
+        
+        /* Стили для блоков документов в PDF */
+        .task-content div[style*="border: 1px solid #ddd"] {
+            page-break-inside: avoid !important;
+            margin: 15px 0 !important;
+            border: 1px solid #ddd !important;
+            border-radius: 5px !important;
+            padding: 15px !important;
+            background: #f8f9fa !important;
+        }
+        
+        .task-content div[style*="border: 1px solid #ddd"] a {
+            color: #007bff !important;
+            text-decoration: underline !important;
+            font-weight: bold !important;
+            word-break: break-all;
+        }
+        
+        .task-content div[style*="border: 1px solid #ddd"] span[style*="background: #007bff"] {
+            display: inline-block !important;
+            color: white !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            background: #007bff !important;
+            border-radius: 3px !important;
+            padding: 2px 4px !important;
+            font-size: 10pt !important;
+            margin-right: 8px !important;
+        }
+        
+        /* Улучшенные стили для изображений */
+        .task-content img {
+            max-width: 100% !important;
+            height: auto !important;
+            max-height: 400px !important;
+            border: 1px solid #ddd !important;
+            border-radius: 4px !important;
+            padding: 4px !important;
+            margin: 10px auto !important;
+            display: block !important;
+            page-break-inside: avoid !important;
+        }
+        
+        /* Стили для множественных файлов */
+        .task-content div[style*="margin: 10px 0"] {
+            page-break-inside: avoid !important;
+        }
+        
+        /* Общие стили для блоков с файлами */
+        .task-content div[style*="page-break-inside: avoid"] {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+        
+        /* Стили для URL ссылок */
+        .task-content p[style*="font-size: 10pt"] {
+            word-break: break-all !important;
+            overflow-wrap: break-word !important;
+        }
         }
     </style>
 </head>
@@ -210,6 +298,12 @@
         </div>
     </div>
 
+    <!-- Информация о ссылках в PDF -->
+    <div style="background: #e3f2fd; border: 1px solid #90caf9; border-radius: 5px; padding: 10px; margin: 15px 0; font-size: 10pt;">
+        <p style="margin: 0; color: #1565c0;"><strong>📋 Информация о файлах и ссылках:</strong></p>
+        <p style="margin: 5px 0 0 0; color: #1976d2;">Все ссылки в данном PDF документе активны и доступны для перехода. Кликните по любой ссылке, чтобы скачать файл или перейти к ресурсу.</p>
+    </div>
+
     @if($task->description)
     <div class="content-section">
         <h2 class="section-title">Описание</h2>
@@ -235,6 +329,14 @@
     <div class="footer">
         <p>Документ создан {{ now()->format('d.m.Y в H:i') }}</p>
         <p>Система управления задачами - {{ config('app.name', 'Kanban') }}</p>
+        @if(isset($taskUrl))
+        <p style="margin-top: 10px; font-size: 10pt; color: #007bff;">
+            <strong>Ссылка на задачу:</strong> 
+            <a href="{{ $taskUrl }}" target="_blank" style="color: #007bff; text-decoration: underline; word-break: break-all;">
+                {{ $taskUrl }}
+            </a>
+        </p>
+        @endif
     </div>
 </body>
 </html>

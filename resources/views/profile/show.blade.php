@@ -95,6 +95,11 @@
                                 <i class="fas fa-shield-alt me-2"></i>Безопасность
                             </button>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="storage-tab" data-bs-toggle="tab" data-bs-target="#storage" type="button" role="tab">
+                                <i class="fas fa-hdd me-2"></i>Управление памятью
+                            </button>
+                        </li>
                     </ul>
                 </div>
 
@@ -388,6 +393,144 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Управление памятью -->
+                    <div class="tab-pane fade" id="storage" role="tabpanel">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <!-- Общая статистика памяти -->
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Использование памяти</h5>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="syncStorage()">
+                                            <i class="fas fa-sync-alt me-1"></i>Синхронизировать
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <div class="stat-card text-center">
+                                                    <div class="stat-value" id="totalUsed">{{ $user->formatted_storage_usage }}</div>
+                                                    <div class="stat-label">Использовано</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card text-center">
+                                                    <div class="stat-value">{{ $user->formatted_storage_limit }}</div>
+                                                    <div class="stat-label">Лимит</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="stat-card text-center">
+                                                    <div class="stat-value" id="usagePercent">{{ number_format($user->storage_usage_percent, 1) }}%</div>
+                                                    <div class="stat-label">Заполнено</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="progress mb-3" style="height: 20px;">
+                                            <div class="progress-bar {{ $user->storage_usage_percent > 80 ? 'bg-warning' : 'bg-primary' }}" 
+                                                 role="progressbar" 
+                                                 style="width: {{ min($user->storage_usage_percent, 100) }}%"
+                                                 id="storageProgressBar">
+                                                {{ number_format($user->storage_usage_percent, 1) }}%
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p class="mb-1"><strong>Текущий план:</strong> {{ $user->plan_type_display }}</p>
+                                                <p class="mb-0"><strong>Пространств:</strong> <span id="spacesCount">{{ $user->spaces()->count() }}</span></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="d-grid gap-2">
+                                                    <a href="{{ route('memory.plans') }}" class="btn btn-success btn-sm">
+                                                        <i class="fas fa-upgrade me-1"></i>Увеличить лимит
+                                                    </a>
+                                                    <button type="button" class="btn btn-info btn-sm" onclick="showSpacesDetails()">
+                                                        <i class="fas fa-eye me-1"></i>Детали по пространствам
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Детали по пространствам -->
+                                <div class="card mb-4" id="spacesDetailsCard" style="display: none;">
+                                    <div class="card-header">
+                                        <h6 class="mb-0"><i class="fas fa-layer-group me-2"></i>Использование памяти по пространствам</h6>
+                                    </div>
+                                    <div class="card-body" id="spacesDetailsContent">
+                                        <div class="text-center">
+                                            <div class="spinner-border" role="status">
+                                                <span class="visually-hidden">Загрузка...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Оптимизация памяти -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0"><i class="fas fa-broom me-2"></i>Оптимизация памяти</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Удаление архивированных задач поможет освободить место
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="cleanupDays" class="form-label">Удалить задачи старше (дней):</label>
+                                                <select class="form-select" id="cleanupDays">
+                                                    <option value="30">30 дней</option>
+                                                    <option value="60">60 дней</option>
+                                                    <option value="90">90 дней</option>
+                                                    <option value="180">180 дней</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 d-flex align-items-end">
+                                                <button type="button" class="btn btn-warning" onclick="cleanupTasks()">
+                                                    <i class="fas fa-trash-alt me-1"></i>Очистить
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <!-- Рекомендации -->
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h6 class="mb-0"><i class="fas fa-lightbulb me-2"></i>Рекомендации</h6>
+                                    </div>
+                                    <div class="card-body" id="optimizationTips">
+                                        <div class="text-center">
+                                            <div class="spinner-border spinner-border-sm" role="status">
+                                                <span class="visually-hidden">Загрузка...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Статистика за период -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0"><i class="fas fa-chart-line me-2"></i>Активность за 30 дней</h6>
+                                    </div>
+                                    <div class="card-body" id="activityStats">
+                                        <div class="text-center">
+                                            <div class="spinner-border spinner-border-sm" role="status">
+                                                <span class="visually-hidden">Загрузка...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -640,6 +783,249 @@ document.addEventListener('DOMContentLoaded', function() {
         card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(card);
     });
+    
+    // Функции для управления памятью
+    window.syncStorage = function() {
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Синхронизация...';
+        
+        fetch('/api/storage/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Обновляем значения на странице
+                document.getElementById('totalUsed').textContent = formatStorageSize(data.new_usage);
+                updateProgressBar(data.new_usage);
+                
+                showNotification(data.message, 'success');
+            } else {
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Произошла ошибка при синхронизации', 'error');
+        })
+        .finally(() => {
+            button.disabled = false;
+            button.innerHTML = originalText;
+        });
+    };
+    
+    window.showSpacesDetails = function() {
+        const card = document.getElementById('spacesDetailsCard');
+        const content = document.getElementById('spacesDetailsContent');
+        
+        if (card.style.display === 'none') {
+            card.style.display = 'block';
+            
+            // Загружаем детали пространств
+            fetch('/api/storage/spaces-stats')
+            .then(response => response.json())
+            .then(data => {
+                let html = '';
+                
+                if (data.spaces_details && data.spaces_details.length > 0) {
+                    data.spaces_details.forEach(spaceData => {
+                        const space = spaceData.space;
+                        const usage = spaceData.usage;
+                        
+                        html += `
+                        <div class="space-detail-card mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">${space.name}</h6>
+                                <span class="badge bg-primary">${usage.total_size_mb} МБ</span>
+                            </div>
+                            <div class="row small text-muted">
+                                <div class="col-6">Задач: ${usage.tasks_count}</div>
+                                <div class="col-6">Колонок: ${usage.columns_count}</div>
+                                <div class="col-6">Контент: ${usage.content_size_mb} МБ</div>
+                                <div class="col-6">Файлы: ${usage.files_size_mb} МБ</div>
+                            </div>
+                        </div>`;
+                    });
+                } else {
+                    html = '<p class="text-muted">У вас пока нет пространств</p>';
+                }
+                
+                content.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                content.innerHTML = '<p class="text-danger">Ошибка загрузки данных</p>';
+            });
+        } else {
+            card.style.display = 'none';
+        }
+    };
+    
+    window.cleanupTasks = function() {
+        const days = document.getElementById('cleanupDays').value;
+        
+        if (!confirm(`Вы уверены, что хотите удалить все архивированные задачи старше ${days} дней? Это действие нельзя отменить.`)) {
+            return;
+        }
+        
+        const button = event.target;
+        const originalText = button.innerHTML;
+        
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Очистка...';
+        
+        fetch('/api/storage/cleanup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ days: parseInt(days) })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification(`${data.message}. Освобождено: ${data.freed_memory_mb} МБ`, 'success');
+                
+                // Обновляем статистику
+                document.getElementById('totalUsed').textContent = formatStorageSize(data.new_usage_mb);
+                updateProgressBar(data.new_usage_mb);
+            } else {
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Произошла ошибка при очистке', 'error');
+        })
+        .finally(() => {
+            button.disabled = false;
+            button.innerHTML = originalText;
+        });
+    };
+    
+    function formatStorageSize(sizeInMB) {
+        if (sizeInMB >= 1024) {
+            return (sizeInMB / 1024).toFixed(2) + ' ГБ';
+        }
+        return sizeInMB.toFixed(2) + ' МБ';
+    }
+    
+    function updateProgressBar(usedMB) {
+        const limitMB = {{ $user->total_storage_limit }};
+        const percent = (usedMB / limitMB) * 100;
+        const progressBar = document.getElementById('storageProgressBar');
+        
+        progressBar.style.width = Math.min(percent, 100) + '%';
+        progressBar.textContent = percent.toFixed(1) + '%';
+        
+        // Меняем цвет в зависимости от заполненности
+        progressBar.className = 'progress-bar ' + (percent > 80 ? 'bg-warning' : 'bg-primary');
+        
+        document.getElementById('usagePercent').textContent = percent.toFixed(1) + '%';
+    }
+    
+    function showNotification(message, type = 'info') {
+        const alertClass = type === 'success' ? 'alert-success' : 
+                          type === 'error' ? 'alert-danger' : 
+                          type === 'warning' ? 'alert-warning' : 'alert-info';
+        
+        const notification = document.createElement('div');
+        notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Автоматически убираем через 5 секунд
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+    
+    // Загружаем рекомендации и статистику при открытии вкладки
+    document.getElementById('storage-tab').addEventListener('shown.bs.tab', function() {
+        // Загружаем рекомендации
+        fetch('/api/storage/tips')
+        .then(response => response.json())
+        .then(data => {
+            let html = '';
+            if (data.tips && data.tips.length > 0) {
+                data.tips.forEach(tip => {
+                    const iconClass = tip.type === 'warning' ? 'fa-exclamation-triangle text-warning' :
+                                     tip.type === 'danger' ? 'fa-exclamation-circle text-danger' :
+                                     'fa-info-circle text-info';
+                    
+                    html += `
+                    <div class="d-flex align-items-start mb-3">
+                        <i class="fas ${iconClass} me-2 mt-1"></i>
+                        <span class="small">${tip.message}</span>
+                    </div>`;
+                });
+            } else {
+                html = '<p class="text-success small"><i class="fas fa-check-circle me-2"></i>Все в порядке! Память используется эффективно.</p>';
+            }
+            
+            document.getElementById('optimizationTips').innerHTML = html;
+        })
+        .catch(error => {
+            document.getElementById('optimizationTips').innerHTML = '<p class="text-danger small">Ошибка загрузки рекомендаций</p>';
+        });
+    });
 });
 </script>
+
+<!-- Стили для новой вкладки -->
+<style>
+.stat-card {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.space-detail-card {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.space-detail-card h6 {
+    color: #2c3e50;
+}
+
+#storageProgressBar {
+    transition: all 0.3s ease;
+}
+
+.photo-changing {
+    transition: opacity 0.5s ease;
+    opacity: 0.7;
+}
+</style>
 @endsection
